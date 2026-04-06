@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titan Fitness — Forge Your Legacy</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060608;
+  --surface:#0e0e14;
+  --card:#13131a;
+  --border:#1f1f2e;
+  --border2:#2a2a3e;
+  --gold:#f0a500;
+  --gold2:#ffbe33;
+  --gold-dim:rgba(240,165,0,0.1);
+  --gold-glow:rgba(240,165,0,0.25);
+  --white:#f4f4ff;
+  --grey:#8888aa;
+  --muted:#44445a;
+  --red:#e8001d;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--gold);}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;transition:opacity 0.6s,visibility 0.6s;
+}
+#loader.hide{opacity:0;visibility:hidden;}
+.loader-text{
+  font-family:'Oswald',sans-serif;
+  font-size:48px;font-weight:700;
+  letter-spacing:8px;color:var(--gold);
+  animation:loaderPulse 1s infinite;
+}
+@keyframes loaderPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px 6%;
+  transition:all 0.4s;
+}
+nav.scrolled{
+  background:rgba(6,6,8,0.95);
+  backdrop-filter:blur(20px);
+  padding:14px 6%;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 4px 40px rgba(0,0,0,0.5);
+}
+.logo{
+  font-family:'Oswald',sans-serif;
+  font-size:26px;font-weight:700;
+  letter-spacing:4px;color:var(--white);
+  text-decoration:none;
+}
+.logo span{color:var(--gold);}
+
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{
+  color:var(--grey);text-decoration:none;
+  font-size:13px;font-weight:500;letter-spacing:1.5px;
+  text-transform:uppercase;transition:color 0.3s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;
+  height:1px;background:var(--gold);
+  transform:scaleX(0);transform-origin:left;transition:transform 0.3s;
+}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::after{transform:scaleX(1);}
+
+.nav-btn{
+  background:var(--gold);color:#060608;
+  padding:10px 24px;border-radius:2px;
+  font-family:'Oswald',sans-serif;
+  font-size:13px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;text-decoration:none;
+  transition:all 0.3s;
+  box-shadow:0 0 20px var(--gold-glow);
+}
+.nav-btn:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 4px 30px var(--gold-glow);}
+
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);transition:all 0.3s;}
+.mob-menu{
+  display:none;position:fixed;top:65px;left:0;right:0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:20px 6%;flex-direction:column;gap:16px;z-index:998;
+}
+.mob-menu.open{display:flex;}
+.mob-menu a{color:var(--grey);text-decoration:none;font-size:15px;padding:8px 0;border-bottom:1px solid var(--border);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:0 6%;
+  position:relative;overflow:hidden;
+  background:var(--bg);
+}
+
+/* animated bg lines */
+.hero-lines{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 79px,
+    rgba(240,165,0,0.025) 80px
+  );
+}
+
+/* big bg text */
+.hero-bg-text{
+  position:absolute;
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(120px,22vw,260px);
+  font-weight:700;
+  letter-spacing:-5px;
+  color:rgba(240,165,0,0.025);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+  pointer-events:none;
+  animation:bgTextFloat 8s ease-in-out infinite;
+}
+@keyframes bgTextFloat{
+  0%,100%{transform:translate(-50%,-50%) translateY(0);}
+  50%{transform:translate(-50%,-50%) translateY(-20px);}
+}
+
+/* gold beam */
+.hero-beam{
+  position:absolute;
+  width:2px;height:100%;
+  background:linear-gradient(to bottom,transparent,var(--gold),transparent);
+  left:30%;top:0;opacity:0.15;
+  animation:beamMove 6s ease-in-out infinite;
+}
+@keyframes beamMove{
+  0%,100%{left:30%;opacity:0.15;}
+  50%{left:70%;opacity:0.08;}
+}
+
+.hero-content{position:relative;z-index:2;max-width:760px;}
+
+.hero-eyebrow{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:28px;
+  animation:fadeUp 0.8s 0.2s ease both;
+}
+.eyebrow-line{width:40px;height:2px;background:var(--gold);}
+.eyebrow-text{
+  font-size:12px;font-weight:600;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);
+}
+
+.hero h1{
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(56px,9vw,110px);
+  font-weight:700;line-height:0.92;
+  letter-spacing:-1px;
+  animation:fadeUp 0.8s 0.3s ease both;
+}
+.hero h1 .word{
+  display:inline-block;
+  animation:wordReveal 0.8s ease both;
+}
+.hero h1 .word:nth-child(1){animation-delay:0.3s;}
+.hero h1 .word:nth-child(2){animation-delay:0.45s;color:var(--gold);-webkit-text-stroke:0px;}
+.hero h1 .word:nth-child(3){animation-delay:0.6s;-webkit-text-stroke:1px var(--white);color:transparent;}
+@keyframes wordReveal{
+  from{opacity:0;transform:translateY(60px) skewY(5deg);}
+  to{opacity:1;transform:translateY(0) skewY(0);}
+}
+
+.hero-desc{
+  font-size:17px;color:var(--grey);
+  line-height:1.75;max-width:460px;
+  margin:28px 0 40px;font-weight:300;
+  animation:fadeUp 0.8s 0.7s ease both;
+}
+
+/* JOIN NOW button with animation */
+.join-btn{
+  position:relative;
+  display:inline-flex;align-items:center;gap:14px;
+  background:var(--gold);color:#060608;
+  padding:18px 44px;
+  font-family:'Oswald',sans-serif;
+  font-size:16px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  text-decoration:none;border:none;cursor:pointer;
+  overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%,16px 50%);
+  animation:fadeUp 0.8s 0.8s ease both;
+  transition:all 0.3s;
+}
+.join-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
+  transform:translateX(-100%);
+  transition:transform 0.5s;
+}
+.join-btn:hover::before{transform:translateX(100%);}
+.join-btn:hover{background:var(--gold2);box-shadow:0 0 50px var(--gold-glow);transform:scale(1.03);}
+.join-btn .btn-arrow{font-size:20px;transition:transform 0.3s;}
+.join-btn:hover .btn-arrow{transform:translateX(6px);}
+
+.hero-secondary{
+  display:inline-flex;align-items:center;gap:12px;
+  margin-left:20px;
+  color:var(--grey);font-size:14px;
+  border:1px solid var(--border2);
+  padding:18px 28px;
+  text-decoration:none;
+  transition:all 0.3s;
+  animation:fadeUp 0.8s 0.9s ease both;
+}
+.hero-secondary:hover{border-color:var(--gold);color:var(--gold);}
+
+.hero-stats{
+  display:flex;gap:50px;
+  margin-top:70px;padding-top:40px;
+  border-top:1px solid var(--border);
+  animation:fadeUp 0.8s 1s ease both;
+}
+.stat{position:relative;}
+.stat::after{
+  content:'';position:absolute;
+  right:-25px;top:10%;bottom:10%;
+  width:1px;background:var(--border);
+}
+.stat:last-child::after{display:none;}
+.stat-n{
+  font-family:'Oswald',sans-serif;
+  font-size:44px;font-weight:700;
+  color:var(--gold);letter-spacing:-1px;
+  line-height:1;
+}
+.stat-l{font-size:12px;color:var(--grey);margin-top:6px;letter-spacing:1px;text-transform:uppercase;}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── TICKER ── */
+.ticker{
+  overflow:hidden;
+  background:var(--gold);
+  padding:14px 0;
+}
+.ticker-track{
+  display:flex;gap:0;
+  animation:ticker 18s linear infinite;
+  white-space:nowrap;
+}
+.ticker-item{
+  display:flex;align-items:center;gap:20px;
+  padding:0 30px;
+  font-family:'Oswald',sans-serif;
+  font-size:14px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:#060608;flex-shrink:0;
+}
+.ticker-dot{width:5px;height:5px;background:#060608;border-radius:50%;opacity:0.4;}
+@keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTION COMMON ── */
+section{padding:110px 6%;}
+.sec-eyebrow{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:16px;
+}
+.sec-eyebrow .eyebrow-line{width:30px;height:2px;background:var(--gold);}
+.sec-eyebrow span{
+  font-size:11px;font-weight:600;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);
+}
+.sec-title{
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(38px,6vw,68px);
+  font-weight:700;letter-spacing:-1px;
+  line-height:1;color:var(--white);
+  margin-bottom:16px;
+}
+.sec-sub{
+  font-size:16px;color:var(--grey);
+  font-weight:300;line-height:1.75;
+  max-width:500px;margin-bottom:64px;
+}
+
+/* ── MEMBERSHIP ── */
+.membership{background:var(--surface);}
+
+.plans{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+}
+
+.plan{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:48px 36px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.plan::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform 0.5s;
+}
+.plan:hover::before{transform:scaleX(1);}
+.plan:hover{
+  transform:translateY(-8px);
+  border-color:rgba(240,165,0,0.3);
+  box-shadow:0 30px 80px rgba(0,0,0,0.4);
+}
+
+.plan.hot{
+  border-color:var(--gold);
+  background:linear-gradient(160deg,#130e00,var(--card) 60%);
+}
+.plan-popular{
+  position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:#060608;
+  font-family:'Oswald',sans-serif;
+  font-size:11px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:5px 18px;
+}
+.plan-tier{
+  font-family:'Oswald',sans-serif;
+  font-size:14px;font-weight:500;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--grey);margin-bottom:24px;
+}
+.plan.hot .plan-tier{color:var(--gold);}
+.plan-price{
+  font-family:'Oswald',sans-serif;
+  font-size:76px;font-weight:700;
+  letter-spacing:-3px;color:var(--white);
+  line-height:1;
+}
+.plan-price sup{font-size:28px;vertical-align:super;color:var(--gold);}
+.plan-price sub{font-size:18px;font-weight:400;color:var(--grey);}
+.plan-div{height:1px;background:var(--border);margin:28px 0;}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:36px;}
+.plan-feats li{
+  display:flex;align-items:center;gap:12px;
+  font-size:14px;color:var(--grey);
+}
+.plan-feats li::before{
+  content:'✓';
+  width:22px;height:22px;
+  background:var(--gold-dim);
+  border:1px solid rgba(240,165,0,0.3);
+  color:var(--gold);
+  border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.plan-feats li.no{color:var(--muted);}
+.plan-feats li.no::before{
+  content:'—';background:transparent;
+  border-color:var(--border);color:var(--muted);
+}
+.plan-cta{
+  width:100%;padding:15px;
+  font-family:'Oswald',sans-serif;
+  font-size:14px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  background:transparent;
+  border:1px solid var(--border2);
+  color:var(--grey);cursor:pointer;
+  transition:all 0.3s;
+  text-decoration:none;display:block;text-align:center;
+}
+.plan.hot .plan-cta{
+  background:var(--gold);border-color:var(--gold);
+  color:#060608;box-shadow:0 0 30px var(--gold-glow);
+}
+.plan:not(.hot):hover .plan-cta{
+  border-color:var(--gold);color:var(--gold);background:var(--gold-dim);
+}
+
+/* ── TRAINERS ── */
+.trainers-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:2px;
+}
+.trainer{
+  position:relative;overflow:hidden;
+  aspect-ratio:3/4;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+.trainer-visual{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;
+  transition:transform 0.6s cubic-bezier(0.23,1,0.32,1);
+}
+.trainer:hover .trainer-visual{transform:scale(1.08);}
+
+.tv1{background:radial-gradient(ellipse at 30% 70%,#1a0a00,var(--bg));}
+.tv2{background:radial-gradient(ellipse at 70% 30%,#0a0a1a,var(--bg));}
+.tv3{background:radial-gradient(ellipse at 50% 50%,#0a1a0a,var(--bg));}
+.tv4{background:radial-gradient(ellipse at 20% 80%,#1a0010,var(--bg));}
+
+.trainer-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:28px 24px;
+  background:linear-gradient(to top,rgba(6,6,8,0.98) 0%,rgba(6,6,8,0.6) 60%,transparent 100%);
+  transform:translateY(30px);
+  transition:transform 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.trainer:hover .trainer-info{transform:translateY(0);}
+.trainer-name{
+  font-family:'Oswald',sans-serif;
+  font-size:22px;font-weight:600;
+  letter-spacing:1px;color:var(--white);
+}
+.trainer-role{
+  font-size:12px;color:var(--gold);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-top:4px;
+}
+.trainer-exp{
+  font-size:12px;color:var(--grey);
+  margin-top:10px;
+  opacity:0;transform:translateY(10px);
+  transition:all 0.3s 0.1s;
+}
+.trainer:hover .trainer-exp{opacity:1;transform:translateY(0);}
+.trainer-tag{
+  position:absolute;top:16px;left:16px;
+  background:var(--gold);color:#060608;
+  font-family:'Oswald',sans-serif;
+  font-size:10px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:4px 10px;
+}
+
+/* ── GALLERY ── */
+.gallery-section{background:var(--surface);}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:240px 240px;
+  gap:3px;
+}
+.gal{
+  overflow:hidden;position:relative;
+  background:var(--card);cursor:pointer;
+}
+.gal:nth-child(1){grid-column:span 5;grid-row:span 2;}
+.gal:nth-child(2){grid-column:span 4;}
+.gal:nth-child(3){grid-column:span 3;}
+.gal:nth-child(4){grid-column:span 3;}
+.gal:nth-child(5){grid-column:span 4;}
+
+.gal-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+  transition:transform 0.6s cubic-bezier(0.23,1,0.32,1);
+  position:relative;
+}
+.gal:hover .gal-inner{transform:scale(1.1);}
+
+.g1{background:linear-gradient(135deg,#0f0800,#1a1200,#0f0800);}
+.g2{background:linear-gradient(135deg,#080012,#120020,#080012);}
+.g3{background:linear-gradient(135deg,#120000,#200008,#120000);}
+.g4{background:linear-gradient(135deg,#000f0f,#001818,#000f0f);}
+.g5{background:linear-gradient(135deg,#100800,#1c1200,#100800);}
+
+.gal-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(240,165,0,0.85),transparent);
+  opacity:0;transition:opacity 0.4s;
+  display:flex;align-items:flex-end;padding:20px;
+}
+.gal:hover .gal-overlay{opacity:1;}
+.gal-label{
+  font-family:'Oswald',sans-serif;
+  font-size:16px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:#060608;
+}
+
+/* ── MAP ── */
+.map-section{background:var(--bg);}
+.map-wrap{
+  display:grid;grid-template-columns:1fr 1.2fr;
+  gap:3px;border:1px solid var(--border);
+}
+.map-info{
+  background:var(--card);padding:56px;
+  display:flex;flex-direction:column;gap:28px;
+}
+.map-detail{display:flex;align-items:flex-start;gap:18px;}
+.map-icon{
+  width:46px;height:46px;
+  background:var(--gold-dim);
+  border:1px solid rgba(240,165,0,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  border-radius:3px;
+}
+.map-text strong{
+  display:block;font-size:12px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);margin-bottom:5px;
+}
+.map-text span{font-size:14px;color:var(--grey);line-height:1.6;}
+
+.map-frame{
+  min-height:420px;position:relative;overflow:hidden;
+}
+.map-frame iframe{
+  width:100%;height:100%;border:none;min-height:420px;
+  filter:grayscale(80%) invert(90%) hue-rotate(180deg);
+}
+
+/* ── CONTACT ── */
+.contact-section{background:var(--surface);}
+.contact-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:3px;border:1px solid var(--border);
+}
+.contact-left{
+  background:var(--card);padding:64px;
+}
+.contact-right{
+  background:linear-gradient(135deg,#100800,#0a0600);
+  padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.contact-right::before{
+  content:'TITAN';
+  position:absolute;
+  font-family:'Oswald',sans-serif;
+  font-size:160px;font-weight:700;
+  color:rgba(240,165,0,0.04);
+  bottom:-20px;right:-20px;
+  letter-spacing:-5px;
+  line-height:1;pointer-events:none;
+}
+
+.contact-form{display:flex;flex-direction:column;gap:16px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.fg{display:flex;flex-direction:column;gap:8px;}
+.fg label{
+  font-size:10px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--grey);
+}
+.fg input,.fg select,.fg textarea{
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--white);
+  padding:14px 16px;
+  font-family:'Inter',sans-serif;
+  font-size:14px;outline:none;
+  border-radius:2px;
+  transition:border-color 0.3s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg textarea{resize:vertical;min-height:110px;}
+.fg select option{background:var(--surface);}
+
+.submit-btn{
+  background:var(--gold);color:#060608;
+  padding:16px;border:none;cursor:pointer;
+  font-family:'Oswald',sans-serif;
+  font-size:15px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  transition:all 0.3s;position:relative;overflow:hidden;
+}
+.submit-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  transform:translateX(-100%);transition:transform 0.5s;
+}
+.submit-btn:hover::before{transform:translateX(100%);}
+.submit-btn:hover{background:var(--gold2);box-shadow:0 0 40px var(--gold-glow);}
+
+.wa-block{text-align:center;}
+.wa-number{
+  font-family:'Oswald',sans-serif;
+  font-size:clamp(28px,4vw,46px);
+  font-weight:700;letter-spacing:-1px;
+  color:var(--white);margin-bottom:8px;
+}
+.wa-sub{font-size:13px;color:var(--grey);margin-bottom:36px;line-height:1.6;}
+.wa-btn{
+  display:inline-flex;align-items:center;gap:14px;
+  background:#25D366;color:white;
+  padding:18px 36px;
+  font-family:'Oswald',sans-serif;
+  font-size:15px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  text-decoration:none;
+  transition:all 0.3s;
+  box-shadow:0 0 40px rgba(37,211,102,0.2);
+}
+.wa-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 40px rgba(37,211,102,0.4);
+}
+.wa-btn .wa-icon{font-size:22px;}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:36px 6%;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+}
+.footer-logo{
+  font-family:'Oswald',sans-serif;
+  font-size:22px;font-weight:700;
+  letter-spacing:4px;
+}
+.footer-logo span{color:var(--gold);}
+footer p{font-size:12px;color:var(--muted);}
+
+/* ── FLOAT WA ── */
+.float-wa{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  display:flex;align-items:center;gap:10px;
+  background:#25D366;color:white;
+  padding:13px 22px 13px 18px;
+  border-radius:100px;
+  font-family:'Oswald',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+  text-decoration:none;
+  box-shadow:0 4px 30px rgba(37,211,102,0.3);
+  animation:waPulse 3s infinite;
+  transition:all 0.3s;
+}
+.float-wa:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(37,211,102,0.5);}
+@keyframes waPulse{
+  0%,100%{box-shadow:0 4px 30px rgba(37,211,102,0.3);}
+  50%{box-shadow:0 4px 50px rgba(37,211,102,0.6);}
+}
+
+/* ── REVEAL ── */
+.reveal{
+  opacity:0;transform:translateY(32px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.reveal.up{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:0.1s;}
+.reveal-delay-2{transition-delay:0.2s;}
+.reveal-delay-3{transition-delay:0.3s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .trainers-grid{grid-template-columns:repeat(2,1fr);}
+  .plans{grid-template-columns:1fr;max-width:420px;}
+}
+@media(max-width:900px){
+  .map-wrap{grid-template-columns:1fr;}
+  .contact-inner{grid-template-columns:1fr;}
+  .contact-right{border-left:none;border-top:1px solid var(--border);}
+  .gallery-grid{
+    grid-template-columns:repeat(2,1fr);
+    grid-template-rows:auto;
+  }
+  .gal{grid-column:span 1!important;grid-row:span 1!important;height:200px;}
+}
+@media(max-width:768px){
+  nav{padding:16px 5%;}
+  .nav-links,.nav-btn{display:none;}
+  .hamburger{display:flex;}
+  section{padding:70px 5%;}
+  .hero{padding:110px 5% 70px;}
+  .hero-stats{gap:24px;flex-wrap:wrap;}
+  .stat::after{display:none;}
+  .trainers-grid{grid-template-columns:repeat(2,1fr);}
+  .contact-left,.contact-right{padding:36px;}
+  footer{flex-direction:column;text-align:center;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:50px;}
+  .trainers-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .float-wa span:last-child{display:none;}
+  .float-wa{border-radius:50%;padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">TITAN</div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">TITAN <span>FITNESS</span></a>
+  <ul class="nav-links">
+    <li><a href="#membership">Plans</a></li>
+    <li><a href="#trainers">Trainers</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#location">Location</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-btn">Join Now</a>
+  <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="#membership" onclick="closeM()">Membership Plans</a>
+  <a href="#trainers" onclick="closeM()">Trainers</a>
+  <a href="#gallery" onclick="closeM()">Gallery</a>
+  <a href="#location" onclick="closeM()">Location</a>
+  <a href="#contact" onclick="closeM()">Contact</a>
+  <a href="https://wa.me/919876543210" target="_blank" style="color:#25D366!important">💬 WhatsApp Us</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-lines"></div>
+  <div class="hero-bg-text">TITAN</div>
+  <div class="hero-beam"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Chennai's Premier Fitness Destination</span>
+    </div>
+    <h1>
+      <span class="word">FORGE</span><br>
+      <span class="word">YOUR</span><br>
+      <span class="word">LEGACY</span>
+    </h1>
+    <p class="hero-desc">
+      Titan Fitness is where champions are built. World-class equipment, elite coaching, and a culture that pushes you beyond your limits every single day.
+    </p>
+    <div style="display:flex;align-items:center;flex-wrap:wrap;gap:16px;">
+      <a href="#contact" class="join-btn">
+        Join Now <span class="btn-arrow">→</span>
+      </a>
+      <a href="#membership" class="hero-secondary">
+        View Plans ↓
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-n">3200+</div>
+        <div class="stat-l">Active Members</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">20+</div>
+        <div class="stat-l">Elite Trainers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">10</div>
+        <div class="stat-l">Years Strong</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">15K</div>
+        <div class="stat-l">Sq.Ft Facility</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">Weight Training<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Cardio Zone<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Personal Training<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Boxing Ring<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Yoga Studio<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Diet Coaching<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Group Classes<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Sauna & Recovery<div class="ticker-dot"></div></div>
+    <!-- dupe -->
+    <div class="ticker-item">Weight Training<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Cardio Zone<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Personal Training<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Boxing Ring<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Yoga Studio<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Diet Coaching<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Group Classes<div class="ticker-dot"></div></div>
+    <div class="ticker-item">Sauna & Recovery<div class="ticker-dot"></div></div>
+  </div>
+</div>
+
+<!-- MEMBERSHIP -->
+<section class="membership" id="membership">
+  <div class="sec-eyebrow"><div class="eyebrow-line"></div><span>Membership</span></div>
+  <h2 class="sec-title">CHOOSE YOUR<br>BATTLE PLAN</h2>
+  <p class="sec-sub">Flexible memberships designed for every level. No contracts. No excuses.</p>
+
+  <div class="plans">
+    <div class="plan reveal reveal-delay-1">
+      <div class="plan-tier">Warrior</div>
+      <div class="plan-price"><sup>₹</sup>899<sub>/mo</sub></div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>Full Gym Floor Access</li>
+        <li>Cardio Equipment</li>
+        <li>Locker & Shower</li>
+        <li>6 AM – 10 PM Access</li>
+        <li class="no">Personal Trainer</li>
+        <li class="no">Group Classes</li>
+        <li class="no">Diet Consultation</li>
+      </ul>
+      <a href="#contact" class="plan-cta">Choose Warrior</a>
+    </div>
+
+    <div class="plan hot reveal reveal-delay-2">
+      <div class="plan-popular">Most Popular</div>
+      <div class="plan-tier">Champion</div>
+      <div class="plan-price"><sup>₹</sup>1899<sub>/mo</sub></div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>Everything in Warrior</li>
+        <li>Personal Trainer (4x/mo)</li>
+        <li>All Group Classes</li>
+        <li>Diet Consultation</li>
+        <li>Progress Tracking App</li>
+        <li>Guest Pass (1/mo)</li>
+        <li class="no">Priority Booking</li>
+      </ul>
+      <a href="#contact" class="plan-cta">Choose Champion</a>
+    </div>
+
+    <div class="plan reveal reveal-delay-3">
+      <div class="plan-tier">Titan Elite</div>
+      <div class="plan-price"><sup>₹</sup>3299<sub>/mo</sub></div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>Everything in Champion</li>
+        <li>Unlimited PT Sessions</li>
+        <li>Monthly Body Analysis</li>
+        <li>Custom Meal Plan</li>
+        <li>Priority Booking</li>
+        <li>Sauna Access</li>
+        <li>Guest Passes (3/mo)</li>
+      </ul>
+      <a href="#contact" class="plan-cta">Choose Elite</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section id="trainers" style="background:var(--bg);">
+  <div class="sec-eyebrow"><div class="eyebrow-line"></div><span>Our Coaches</span></div>
+  <h2 class="sec-title">TRAIN WITH<br>TITANS</h2>
+  <p class="sec-sub">Certified professionals. Proven results. Your transformation is their mission.</p>
+
+  <div class="trainers-grid">
+    <div class="trainer reveal">
+      <div class="trainer-visual tv1">🏋️</div>
+      <div class="trainer-tag">Head Coach</div>
+      <div class="trainer-info">
+        <div class="trainer-name">Vikram Rajan</div>
+        <div class="trainer-role">Strength & Conditioning</div>
+        <div class="trainer-exp">⚡ 12 years · 400+ clients transformed</div>
+      </div>
+    </div>
+    <div class="trainer reveal reveal-delay-1">
+      <div class="trainer-visual tv2">🏃</div>
+      <div class="trainer-tag">HIIT Specialist</div>
+      <div class="trainer-info">
+        <div class="trainer-name">Divya Menon</div>
+        <div class="trainer-role">Cardio & Fat Loss</div>
+        <div class="trainer-exp">⚡ 8 years · National-level athlete</div>
+      </div>
+    </div>
+    <div class="trainer reveal reveal-delay-2">
+      <div class="trainer-visual tv3">🥊</div>
+      <div class="trainer-tag">Combat Expert</div>
+      <div class="trainer-info">
+        <div class="trainer-name">Karthik Bose</div>
+        <div class="trainer-role">Boxing & MMA</div>
+        <div class="trainer-exp">⚡ 9 years · State champion 2019</div>
+      </div>
+    </div>
+    <div class="trainer reveal reveal-delay-3">
+      <div class="trainer-visual tv4">🧘</div>
+      <div class="trainer-tag">Wellness Coach</div>
+      <div class="trainer-info">
+        <div class="trainer-name">Preethi Nair</div>
+        <div class="trainer-role">Yoga & Flexibility</div>
+        <div class="trainer-exp">⚡ 7 years · 300-RYT certified</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="sec-eyebrow"><div class="eyebrow-line"></div><span>The Facility</span></div>
+  <h2 class="sec-title">INSIDE TITAN</h2>
+  <p class="sec-sub">15,000 sq.ft of cutting-edge equipment across 6 specialized training zones.</p>
+
+  <div class="gallery-grid">
+    <div class="gal reveal">
+      <div class="gal-inner g1">🏋️</div>
+      <div class="gal-overlay"><span class="gal-label">Main Weight Floor</span></div>
+    </div>
+    <div class="gal reveal reveal-delay-1">
+      <div class="gal-inner g2">🚴</div>
+      <div class="gal-overlay"><span class="gal-label">Cardio Zone</span></div>
+    </div>
+    <div class="gal reveal reveal-delay-2">
+      <div class="gal-inner g3">🥊</div>
+      <div class="gal-overlay"><span class="gal-label">Boxing Ring</span></div>
+    </div>
+    <div class="gal reveal reveal-delay-1">
+      <div class="gal-inner g4">🧘</div>
+      <div class="gal-overlay"><span class="gal-label">Yoga Studio</span></div>
+    </div>
+    <div class="gal reveal reveal-delay-2">
+      <div class="gal-inner g5">🚿</div>
+      <div class="gal-overlay"><span class="gal-label">Locker & Sauna</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section" id="location">
+  <div class="sec-eyebrow"><div class="eyebrow-line"></div><span>Find Us</span></div>
+  <h2 class="sec-title">WE'RE IN<br>CHENNAI</h2>
+  <p class="sec-sub">Prime location, easy access, free parking.</p>
+
+  <div class="map-wrap reveal">
+    <div class="map-info">
+      <div class="map-detail">
+        <div class="map-icon">📍</div>
+        <div class="map-text">
+          <strong>Address</strong>
+          <span>78, Nungambakkam High Road<br>Chennai, Tamil Nadu 600034</span>
+        </div>
+      </div>
+      <div class="map-detail">
+        <div class="map-icon">🕐</div>
+        <div class="map-text">
+          <strong>Hours</strong>
+          <span>Mon – Fri: 5:00 AM – 11:00 PM<br>Sat – Sun: 6:00 AM – 10:00 PM</span>
+        </div>
+      </div>
+      <div class="map-detail">
+        <div class="map-icon">📞</div>
+        <div class="map-text">
+          <strong>Phone</strong>
+          <span>+91 98765 43210</span>
+        </div>
+      </div>
+      <div class="map-detail">
+        <div class="map-icon">🚗</div>
+        <div class="map-text">
+          <strong>Parking</strong>
+          <span>Free parking available for members</span>
+        </div>
+      </div>
+    </div>
+    <div class="map-frame">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.5!2d80.2428!3d13.0604!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDAzJzM3LjQiTiA4MMKwMTQnMzQuMSJF!5e0!3m2!1sen!2sin!4v1234567890" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="sec-eyebrow"><div class="eyebrow-line"></div><span>Get Started</span></div>
+  <h2 class="sec-title">START YOUR<br>TRANSFORMATION</h2>
+  <p class="sec-sub">First trial session is completely free. No commitments.</p>
+
+  <div class="contact-inner reveal">
+    <div class="contact-left">
+      <form class="contact-form" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="fg"><label>First Name</label><input type="text" placeholder="Vikram" required></div>
+          <div class="fg"><label>Last Name</label><input type="text" placeholder="Rajan" required></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Phone</label><input type="tel" placeholder="+91 98765 43210" required></div>
+          <div class="fg"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+        </div>
+        <div class="fg">
+          <label>Interested In</label>
+          <select>
+            <option value="">Select a plan...</option>
+            <option>Warrior — ₹899/mo</option>
+            <option>Champion — ₹1899/mo</option>
+            <option>Titan Elite — ₹3299/mo</option>
+            <option>Free Trial Session</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Message (optional)</label>
+          <textarea placeholder="Tell us about your fitness goals..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Send Enquiry →</button>
+      </form>
+    </div>
+
+    <div class="contact-right">
+      <div class="wa-block">
+        <div style="font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Direct WhatsApp</div>
+        <div class="wa-number">+91 98765 43210</div>
+        <div class="wa-sub">Message us directly for the fastest response.<br>We reply within minutes.</div>
+        <a href="https://wa.me/919876543210?text=Hi%20Titan%20Fitness!%20I%20want%20to%20join." target="_blank" class="wa-btn">
+          <span class="wa-icon">💬</span>
+          Chat on WhatsApp
+        </a>
+        <div style="margin-top:36px;padding-top:28px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);line-height:1.8;">
+          📍 78, Nungambakkam High Road, Chennai<br>
+          ⏱️ Mon–Fri 5AM–11PM · Sat–Sun 6AM–10PM<br>
+          ✅ Free trial session for new members
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TITAN <span>FITNESS</span></div>
+  <p>© 2025 Titan Fitness · Chennai, Tamil Nadu</p>
+  <p style="color:var(--gold);font-size:12px;font-weight:600;letter-spacing:2px;">FORGE YOUR LEGACY</p>
+</footer>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/919876543210?text=Hi%20Titan%20Fitness!" target="_blank" class="float-wa">
+  <span style="font-size:20px;">💬</span>
+  <span>WhatsApp</span>
+</a>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 1200);
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Hamburger
+document.getElementById('ham').addEventListener('click', () => {
+  document.getElementById('mobMenu').classList.toggle('open');
+});
+function closeM(){ document.getElementById('mobMenu').classList.remove('open'); }
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('up');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Counter animation
+function animateCounter(el, target, suffix=''){
+  let start = 0;
+  const duration = 2000;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if(start >= target){
+      el.textContent = target + suffix;
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.floor(start) + suffix;
+    }
+  }, 16);
+}
+
+// Trigger counters when hero stats visible
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      document.querySelectorAll('.stat-n').forEach(el => {
+        const text = el.textContent;
+        const num = parseInt(text.replace(/\D/g,''));
+        const suffix = text.replace(/[0-9]/g,'');
+        animateCounter(el, num, suffix);
+      });
+      statsObs.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const statsEl = document.querySelector('.hero-stats');
+if(statsEl) statsObs.observe(statsEl);
+
+// Form submit
+function submitForm(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = '✅ Enquiry Sent!';
+  btn.style.background = '#25D366';
+  setTimeout(() => {
+    btn.textContent = 'Send Enquiry →';
+    btn.style.background = 'var(--gold)';
+    e.target.reset();
+  }, 3000);
+}
+</script>
+</body>
+</html>

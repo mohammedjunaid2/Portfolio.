@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krypton Web Studio — Websites That Bring Customers</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Cabinet+Grotesk:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04040a;
+  --s1:#07070f;
+  --s2:#0a0a16;
+  --card:#0d0d1a;
+  --border:#15152a;
+  --border2:#1e1e35;
+  --c:#00ffcc;
+  --c2:#00e6b8;
+  --c-dim:rgba(0,255,204,0.08);
+  --c-glow:rgba(0,255,204,0.2);
+  --pink:#ff2d78;
+  --pink-dim:rgba(255,45,120,0.08);
+  --yellow:#ffe600;
+  --white:#f0f0ff;
+  --grey:#7070a0;
+  --muted:#303050;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-thumb{background:var(--c);}
+
+/* ── CURSOR ── */
+#cur{
+  position:fixed;width:8px;height:8px;
+  background:var(--c);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.08s;
+  box-shadow:0 0 12px var(--c);
+}
+#cur-ring{
+  position:fixed;width:32px;height:32px;
+  border:1px solid rgba(0,255,204,0.4);
+  border-radius:50%;pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.14s ease;
+}
+body:hover #cur,body:hover #cur-ring{opacity:1;}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;
+  background:var(--bg);
+  z-index:10000;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  transition:opacity 0.8s,visibility 0.8s;
+}
+#loader.hide{opacity:0;visibility:hidden;}
+.l-logo{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,6vw,56px);
+  font-weight:800;
+  color:var(--white);
+  letter-spacing:-1px;
+  animation:lPulse 1.5s ease-in-out infinite;
+}
+.l-logo span{color:var(--c);}
+.l-tagline{
+  font-size:12px;font-weight:500;
+  letter-spacing:5px;text-transform:uppercase;
+  color:var(--muted);margin-top:8px;
+}
+.l-bar{
+  width:180px;height:1px;
+  background:var(--border2);
+  margin-top:32px;border-radius:2px;overflow:hidden;
+}
+.l-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--c),var(--pink));
+  animation:lFill 1.5s ease forwards;
+  width:0;
+}
+@keyframes lPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+@keyframes lFill{to{width:100%;}}
+
+/* ── NOISE OVERLAY ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px 6%;
+  transition:all 0.4s;
+}
+nav.scrolled{
+  background:rgba(4,4,10,0.96);
+  backdrop-filter:blur(20px);
+  padding:14px 6%;
+  border-bottom:1px solid var(--border);
+}
+.n-logo{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:800;
+  color:var(--white);text-decoration:none;
+  display:flex;align-items:center;gap:10px;
+  letter-spacing:-0.5px;
+}
+.n-logo-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--c);
+  box-shadow:0 0 10px var(--c);
+  animation:dotBlink 2s infinite;
+}
+@keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.n-logo span{color:var(--c);}
+
+.n-links{display:flex;gap:30px;list-style:none;}
+.n-links a{
+  color:var(--grey);text-decoration:none;
+  font-size:13px;font-weight:500;
+  letter-spacing:0.5px;transition:color 0.3s;
+}
+.n-links a:hover{color:var(--c);}
+
+.n-cta{
+  display:flex;align-items:center;gap:8px;
+  background:#25D366;color:white;
+  padding:9px 20px;border-radius:100px;
+  font-size:13px;font-weight:600;
+  text-decoration:none;transition:all 0.3s;
+  box-shadow:0 0 20px rgba(37,211,102,0.2);
+}
+.n-cta:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,0.4);}
+
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;}
+.ham span{width:22px;height:2px;background:var(--white);display:block;border-radius:2px;}
+.mob-nav{
+  display:none;position:fixed;top:63px;left:0;right:0;
+  background:var(--s1);border-bottom:1px solid var(--border);
+  padding:20px 6%;flex-direction:column;gap:14px;z-index:998;
+}
+.mob-nav.open{display:flex;}
+.mob-nav a{color:var(--grey);text-decoration:none;font-size:15px;padding:8px 0;border-bottom:1px solid var(--border);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:120px 6% 80px;
+  position:relative;overflow:hidden;
+}
+
+/* animated mesh bg */
+.hero-mesh{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 60% at 80% 40%,rgba(0,255,204,0.05) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 10% 70%,rgba(255,45,120,0.04) 0%,transparent 60%),
+    radial-gradient(ellipse 30% 50% at 50% 90%,rgba(255,230,0,0.03) 0%,transparent 50%);
+}
+.hero-dots{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(0,255,204,0.06) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black,transparent);
+}
+
+/* big text backdrop */
+.hero-backdrop{
+  position:absolute;
+  font-family:'Syne',sans-serif;
+  font-size:clamp(80px,18vw,220px);
+  font-weight:800;
+  color:rgba(0,255,204,0.02);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+  pointer-events:none;
+  letter-spacing:-5px;
+  animation:bdFloat 10s ease-in-out infinite;
+}
+@keyframes bdFloat{0%,100%{transform:translate(-50%,-50%) translateY(0);}50%{transform:translate(-50%,-50%) translateY(-30px);}}
+
+.hero-content{
+  position:relative;z-index:2;
+  max-width:760px;
+}
+
+.hero-available{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid var(--border2);
+  background:var(--s2);
+  padding:8px 18px;border-radius:100px;
+  font-size:12px;color:var(--grey);
+  letter-spacing:0.5px;
+  margin-bottom:36px;
+  animation:fUp 0.8s ease both;
+}
+.avail-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--c);
+  box-shadow:0 0 8px var(--c);
+  animation:dotBlink 1.5s infinite;
+}
+.avail-text{font-weight:500;}
+.avail-status{color:var(--c);font-weight:600;}
+
+.hero-eyebrow{
+  font-size:12px;font-weight:600;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--c);margin-bottom:20px;
+  animation:fUp 0.8s 0.1s ease both;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--c);}
+
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(56px,9vw,110px);
+  font-weight:800;
+  line-height:0.92;
+  letter-spacing:-3px;
+  animation:fUp 0.8s 0.15s ease both;
+}
+.hero h1 .stroke{
+  -webkit-text-stroke:1px rgba(0,255,204,0.5);
+  color:transparent;
+}
+.hero h1 .fill{color:var(--c);}
+
+.hero-desc{
+  font-size:17px;color:var(--grey);
+  line-height:1.75;max-width:500px;
+  margin:28px 0 44px;font-weight:300;
+  animation:fUp 0.8s 0.25s ease both;
+}
+.hero-desc strong{color:var(--white);font-weight:500;}
+
+.hero-actions{
+  display:flex;gap:14px;flex-wrap:wrap;
+  animation:fUp 0.8s 0.35s ease both;
+}
+
+.btn-c{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--c);color:#04040a;
+  padding:15px 32px;border-radius:100px;
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;
+  text-decoration:none;transition:all 0.35s;
+  box-shadow:0 0 30px var(--c-glow);
+  position:relative;overflow:hidden;
+}
+.btn-c::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  transform:translateX(-100%);transition:0.5s;
+}
+.btn-c:hover::before{transform:translateX(100%);}
+.btn-c:hover{transform:translateY(-3px);box-shadow:0 8px 40px var(--c-glow);}
+
+.btn-wa{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#25D366;color:white;
+  padding:15px 32px;border-radius:100px;
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;
+  text-decoration:none;transition:all 0.35s;
+  box-shadow:0 0 20px rgba(37,211,102,0.2);
+}
+.btn-wa:hover{transform:translateY(-3px);box-shadow:0 8px 36px rgba(37,211,102,0.4);}
+
+.hero-nums{
+  display:flex;gap:48px;
+  margin-top:64px;padding-top:40px;
+  border-top:1px solid var(--border);
+  animation:fUp 0.8s 0.45s ease both;
+}
+.hn-num{
+  font-family:'Syne',sans-serif;
+  font-size:40px;font-weight:800;
+  color:var(--c);letter-spacing:-1px;
+  line-height:1;
+}
+.hn-label{font-size:12px;color:var(--muted);margin-top:5px;letter-spacing:0.5px;}
+
+/* right side - floating cards */
+.hero-right{
+  position:absolute;right:5%;top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+  display:flex;flex-direction:column;gap:12px;
+  animation:fUp 0.8s 0.3s ease both;
+}
+.hc{
+  width:220px;
+  background:var(--card);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:16px 18px;
+  display:flex;align-items:center;gap:14px;
+  transition:all 0.4s;
+}
+.hc:nth-child(1){animation:hcFloat 5s ease-in-out infinite;}
+.hc:nth-child(2){animation:hcFloat 5s ease-in-out infinite;animation-delay:-1.7s;}
+.hc:nth-child(3){animation:hcFloat 5s ease-in-out infinite;animation-delay:-3.4s;}
+@keyframes hcFloat{0%,100%{transform:translateX(0);}50%{transform:translateX(-8px);}}
+.hc:hover{border-color:var(--c);transform:translateX(-14px)!important;box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.hc-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--c-dim);
+  border:1px solid rgba(0,255,204,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.hc-name{font-size:13px;font-weight:600;color:var(--white);}
+.hc-type{font-size:11px;color:var(--grey);margin-top:2px;}
+
+@keyframes fUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── MARQUEE ── */
+.mq-wrap{
+  overflow:hidden;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:14px 0;
+  background:var(--s1);
+}
+.mq-track{
+  display:flex;
+  animation:mqAnim 20s linear infinite;
+  white-space:nowrap;
+}
+.mq-item{
+  display:flex;align-items:center;gap:20px;
+  padding:0 36px;
+  font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);flex-shrink:0;
+}
+.mq-item .accent{color:var(--c);}
+@keyframes mqAnim{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTIONS ── */
+section{padding:110px 6%;}
+.s-label{
+  font-size:11px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--c);margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;
+}
+.s-label::before{content:'';width:20px;height:1px;background:var(--c);}
+.s-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px,5.5vw,64px);
+  font-weight:800;letter-spacing:-2px;
+  line-height:1.02;color:var(--white);
+  margin-bottom:14px;
+}
+.s-title span{color:var(--c);}
+.s-sub{
+  font-size:16px;color:var(--grey);
+  font-weight:300;line-height:1.75;
+  max-width:520px;margin-bottom:64px;
+}
+
+/* ── DEMOS ── */
+.demos{background:var(--s1);}
+
+.demos-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+
+.demo-card{
+  background:var(--card);
+  position:relative;
+  overflow:hidden;
+  transition:all 0s;
+  display:flex;flex-direction:column;
+}
+
+.demo-preview{
+  height:220px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  transition:transform 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.demo-card:hover .demo-preview{transform:scale(1.04);}
+
+/* unique bg per card */
+.dp-gym{background:linear-gradient(135deg,#0a0008,#140510,#0a0008);}
+.dp-restaurant{background:linear-gradient(135deg,#0a0600,#160e00,#0a0600);}
+.dp-sweets{background:linear-gradient(135deg,#0f0800,#1a1200,#0f0800);}
+.dp-print{background:linear-gradient(135deg,#00060f,#000d1a,#00060f);}
+.dp-mobile{background:linear-gradient(135deg,#080010,#100020,#080010);}
+.dp-krypton{background:linear-gradient(135deg,#00100a,#001a10,#00100a);}
+.dp-coming{background:linear-gradient(135deg,#100005,#1a0008,#100005);}
+
+.demo-emoji{font-size:64px;z-index:1;position:relative;}
+.demo-name-bg{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(40px,5vw,60px);
+  font-weight:800;
+  position:absolute;
+  opacity:0.04;
+  white-space:nowrap;
+  color:var(--white);
+  letter-spacing:-2px;
+  pointer-events:none;
+}
+
+/* shine sweep on hover */
+.demo-shine{
+  position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.04) 50%,transparent 60%);
+  transform:translateX(-100%);
+  transition:transform 0.6s ease;
+}
+.demo-card:hover .demo-shine{transform:translateX(100%);}
+
+/* color accent line */
+.demo-accent{
+  position:absolute;bottom:0;left:0;right:0;
+  height:2px;transform:scaleX(0);transform-origin:left;
+  transition:transform 0.4s ease;
+}
+.demo-card:hover .demo-accent{transform:scaleX(1);}
+.ac-gym{background:linear-gradient(90deg,#e8001d,#ff4444);}
+.ac-restaurant{background:linear-gradient(90deg,#e8961e,#ffb347);}
+.ac-sweets{background:linear-gradient(90deg,#e8a000,#ffd166);}
+.ac-print{background:linear-gradient(90deg,#0066ff,#00d4ff);}
+.ac-mobile{background:linear-gradient(90deg,#7c3aed,#9d5cff);}
+.ac-krypton{background:linear-gradient(90deg,#00ffcc,#00e6b8);}
+.ac-coming{background:linear-gradient(90deg,#ff2d78,#ff6b9d);}
+
+.demo-body{
+  padding:24px 28px 28px;
+  flex:1;display:flex;flex-direction:column;
+}
+.demo-tag{
+  font-size:10px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.demo-title{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:700;
+  color:var(--white);margin-bottom:8px;
+  letter-spacing:-0.3px;
+}
+.demo-desc{
+  font-size:13px;color:var(--grey);
+  line-height:1.65;margin-bottom:20px;flex:1;
+}
+.demo-footer{
+  display:flex;align-items:center;
+  justify-content:space-between;
+}
+.demo-tech{display:flex;gap:6px;}
+.demo-tech span{
+  font-size:10px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:3px 8px;border-radius:100px;
+  background:var(--s2);border:1px solid var(--border2);
+  color:var(--muted);
+}
+.demo-link{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 20px;border-radius:100px;
+  font-size:12px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  text-decoration:none;
+  border:1px solid var(--border2);
+  color:var(--grey);
+  transition:all 0.3s;
+}
+.demo-card:hover .demo-link{
+  border-color:var(--c);
+  color:var(--c);
+  background:var(--c-dim);
+}
+.demo-link .arr{transition:transform 0.3s;}
+.demo-link:hover .arr{transform:translateX(4px);}
+
+/* coming soon card */
+.demo-coming-overlay{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(4,4,10,0.7);
+  backdrop-filter:blur(4px);
+  flex-direction:column;gap:10px;
+  z-index:2;
+}
+.coming-badge{
+  background:var(--pink);color:white;
+  font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:6px 16px;border-radius:100px;
+}
+
+/* ── SERVICES ── */
+.services{background:var(--bg);}
+.svc-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);border:1px solid var(--border);
+}
+.svc{
+  background:var(--card);
+  padding:44px 36px;
+  position:relative;overflow:hidden;
+  transition:all 0.4s;
+}
+.svc:hover{transform:translateY(-4px);border-bottom:1px solid var(--c);margin-bottom:-1px;}
+.svc-num{
+  font-family:'Syne',sans-serif;
+  font-size:56px;font-weight:800;
+  color:rgba(0,255,204,0.04);
+  position:absolute;top:20px;right:20px;
+  line-height:1;transition:color 0.4s;
+}
+.svc:hover .svc-num{color:rgba(0,255,204,0.08);}
+.svc-icon{
+  width:56px;height:56px;
+  background:var(--c-dim);
+  border:1px solid rgba(0,255,204,0.15);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:24px;
+  transition:all 0.4s;
+}
+.svc:hover .svc-icon{
+  background:var(--c);
+  border-color:var(--c);
+  transform:rotate(-8deg) scale(1.1);
+}
+.svc-name{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:700;
+  color:var(--white);margin-bottom:10px;
+  letter-spacing:-0.2px;
+}
+.svc-desc{font-size:14px;color:var(--grey);line-height:1.7;}
+
+/* ── PRICING ── */
+.pricing{background:var(--s1);}
+.price-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  max-width:900px;
+}
+.pc{
+  background:var(--card);
+  padding:52px 44px;
+  position:relative;overflow:hidden;
+  transition:all 0.4s;
+}
+.pc:hover{background:var(--s2);}
+.pc.hot{
+  background:linear-gradient(160deg,#000d08,var(--card));
+  border:1px solid rgba(0,255,204,0.2);
+  margin:-1px;
+}
+.pc-top-line{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  transform:scaleX(0);transition:transform 0.5s;
+}
+.pc:hover .pc-top-line,.pc.hot .pc-top-line{transform:scaleX(1);}
+.pc-top-line.tl1{background:linear-gradient(90deg,var(--c),transparent);}
+.pc-top-line.tl2{background:linear-gradient(90deg,var(--c),var(--pink));}
+
+.pc-badge{
+  display:inline-block;
+  background:var(--c);color:var(--bg);
+  font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:4px 12px;border-radius:100px;
+  margin-bottom:20px;
+}
+.pc-tier{
+  font-size:11px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--grey);margin-bottom:16px;
+}
+.pc.hot .pc-tier{color:var(--c);}
+.pc-orig{
+  font-size:15px;color:var(--muted);
+  text-decoration:line-through;margin-bottom:4px;
+}
+.pc-price{
+  font-family:'Syne',sans-serif;
+  font-size:64px;font-weight:800;
+  letter-spacing:-3px;color:var(--white);
+  line-height:1;
+}
+.pc-price sup{font-size:24px;vertical-align:super;color:var(--c);}
+.pc-save{
+  display:inline-block;
+  background:var(--c-dim);
+  border:1px solid rgba(0,255,204,0.2);
+  color:var(--c);
+  font-size:11px;font-weight:600;
+  padding:4px 12px;border-radius:100px;
+  margin-top:10px;letter-spacing:0.5px;
+}
+.pc-div{height:1px;background:var(--border);margin:28px 0;}
+.pc-feats{list-style:none;display:flex;flex-direction:column;gap:13px;margin-bottom:36px;}
+.pc-feats li{
+  display:flex;align-items:center;gap:12px;
+  font-size:14px;color:var(--grey);
+}
+.pc-feats li::before{
+  content:'✓';
+  width:20px;height:20px;
+  background:var(--c-dim);
+  border:1px solid rgba(0,255,204,0.2);
+  color:var(--c);
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.pc-btn{
+  width:100%;padding:15px;
+  font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  border:1px solid var(--border2);
+  background:transparent;color:var(--grey);
+  border-radius:100px;cursor:pointer;
+  transition:all 0.3s;
+  text-decoration:none;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.pc.hot .pc-btn{
+  background:var(--c);border-color:var(--c);color:var(--bg);
+  box-shadow:0 0 30px var(--c-glow);
+}
+.pc:not(.hot):hover .pc-btn{
+  border-color:var(--c);color:var(--c);background:var(--c-dim);
+}
+
+/* ── CONTACT ── */
+.contact{background:var(--bg);}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);border:1px solid var(--border);
+}
+.cg-left{
+  background:var(--card);padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.cg-right{
+  background:linear-gradient(135deg,#000d08,#04040a);
+  padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;
+  position:relative;overflow:hidden;
+  border-left:1px solid var(--border);
+}
+.cg-right::before{
+  content:'';position:absolute;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(0,255,204,0.05),transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;
+}
+.cg-number{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,4vw,44px);
+  font-weight:800;letter-spacing:-1px;
+  color:var(--white);margin-bottom:8px;
+  position:relative;z-index:1;
+}
+.cg-sub{font-size:14px;color:var(--grey);line-height:1.7;margin-bottom:32px;position:relative;z-index:1;}
+.wa-big{
+  display:inline-flex;align-items:center;gap:14px;
+  background:#25D366;color:white;
+  padding:18px 36px;border-radius:100px;
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;
+  text-decoration:none;transition:all 0.4s;
+  box-shadow:0 0 40px rgba(37,211,102,0.2);
+  position:relative;z-index:1;
+}
+.wa-big:hover{transform:translateY(-3px);box-shadow:0 12px 50px rgba(37,211,102,0.4);}
+.cg-details{display:flex;flex-direction:column;gap:20px;}
+.cd-item{display:flex;align-items:flex-start;gap:14px;}
+.cd-icon{
+  width:44px;height:44px;
+  background:var(--c-dim);
+  border:1px solid rgba(0,255,204,0.15);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.cd-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;font-weight:700;}
+.cd-val{font-size:14px;color:var(--white);font-weight:500;}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:36px 6%;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+}
+.f-logo{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;
+  color:var(--white);
+  display:flex;align-items:center;gap:10px;
+}
+.f-logo-dot{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);}
+.f-logo span{color:var(--c);}
+footer p{font-size:12px;color:var(--muted);}
+
+/* ── FLOAT WA ── */
+.float-wa{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  display:flex;align-items:center;gap:10px;
+  background:#25D366;color:white;
+  padding:13px 22px 13px 18px;border-radius:100px;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  text-decoration:none;
+  box-shadow:0 4px 30px rgba(37,211,102,0.3);
+  animation:waPulse 3s infinite;transition:all 0.3s;
+}
+.float-wa:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(37,211,102,0.5);}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 30px rgba(37,211,102,0.3);}50%{box-shadow:0 4px 50px rgba(37,211,102,0.6);}}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.up{opacity:1;transform:translateY(0);}
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}.d4{transition-delay:0.4s;}.d5{transition-delay:0.5s;}.d6{transition-delay:0.6s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){
+  .hero-right{display:none;}
+  .demos-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:900px){
+  .svc-grid{grid-template-columns:repeat(2,1fr);}
+  .price-wrap{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .cg-right{border-left:none;border-top:1px solid var(--border);}
+}
+@media(max-width:768px){
+  nav{padding:16px 5%;}
+  .n-links,.n-cta{display:none;}
+  .ham{display:flex;}
+  section{padding:70px 5%;}
+  .hero{padding:110px 5% 70px;}
+  .hero-nums{gap:28px;flex-wrap:wrap;}
+  .demos-grid{grid-template-columns:1fr;}
+  .svc-grid{grid-template-columns:1fr;}
+  .cg-left,.cg-right{padding:40px;}
+  footer{flex-direction:column;text-align:center;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:52px;letter-spacing:-2px;}
+  .hero-actions{flex-direction:column;}
+  .float-wa span:last-child{display:none;}
+  .float-wa{border-radius:50%;padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="l-logo">KRYPTON<span>.</span></div>
+  <div class="l-tagline">Web Studio · Chennai</div>
+  <div class="l-bar"><div class="l-fill"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="n-logo">
+    <div class="n-logo-dot"></div>
+    KRYPTON<span>.</span>
+  </a>
+  <ul class="n-links">
+    <li><a href="#demos">Demos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/919080644007" target="_blank" class="n-cta">💬 WhatsApp</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob-nav" id="mobNav">
+  <a href="#demos" onclick="closeM()">Demo Websites</a>
+  <a href="#services" onclick="closeM()">Services</a>
+  <a href="#pricing" onclick="closeM()">Pricing</a>
+  <a href="#contact" onclick="closeM()">Contact</a>
+  <a href="https://wa.me/919080644007" target="_blank" style="color:#25D366!important">💬 Chat on WhatsApp</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-mesh"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-backdrop">KRYPTON</div>
+
+  <div class="hero-content">
+    <div class="hero-available">
+      <div class="avail-dot"></div>
+      <span class="avail-text">Currently</span>
+      <span class="avail-status">accepting new projects</span>
+    </div>
+    <div class="hero-eyebrow">Krypton Web Studio · Chennai</div>
+    <h1>
+      WEBSITES<br>
+      THAT <span class="fill">BRING</span><br>
+      <span class="stroke">CUSTOMERS</span>
+    </h1>
+    <p class="hero-desc">
+      We build <strong>professional websites</strong> for local businesses — gyms, restaurants, shops, salons and more. Fast delivery. Premium design. <strong>Real results.</strong>
+    </p>
+    <div class="hero-actions">
+      <a href="#demos" class="btn-c">✦ View Demo Websites</a>
+      <a href="https://wa.me/919080644007?text=Hi%20Krypton%20Web%20Studio!%20I%20want%20a%20website." target="_blank" class="btn-wa">💬 Chat on WhatsApp</a>
+    </div>
+    <div class="hero-nums">
+      <div>
+        <div class="hn-num" data-target="50">0+</div>
+        <div class="hn-label">Websites Delivered</div>
+      </div>
+      <div>
+        <div class="hn-num" data-target="3">0</div>
+        <div class="hn-label">Days Avg Delivery</div>
+      </div>
+      <div>
+        <div class="hn-num" data-target="100">0%</div>
+        <div class="hn-label">Client Satisfaction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating demo preview cards -->
+  <div class="hero-right">
+    <div class="hc">
+      <div class="hc-icon">🏋️</div>
+      <div><div class="hc-name">Titan Fitness</div><div class="hc-type">Gym Website</div></div>
+    </div>
+    <div class="hc">
+      <div class="hc-icon">🍛</div>
+      <div><div class="hc-name">Spice Garden</div><div class="hc-type">Restaurant Website</div></div>
+    </div>
+    <div class="hc">
+      <div class="hc-icon">📱</div>
+      <div><div class="hc-name">SmartTech</div><div class="hc-type">Mobile Shop Website</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq-wrap">
+  <div class="mq-track">
+    <div class="mq-item">Gym Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Restaurant Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Sweet Shop Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Printing Shop Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Mobile Shop Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Salon Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Tuition Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Medical Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Portfolio Websites <span class="accent">✦</span></div>
+    <!-- dupe -->
+    <div class="mq-item">Gym Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Restaurant Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Sweet Shop Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Printing Shop Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Mobile Shop Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Salon Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Tuition Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Medical Websites <span class="accent">✦</span></div>
+    <div class="mq-item">Portfolio Websites <span class="accent">✦</span></div>
+  </div>
+</div>
+
+<!-- DEMOS -->
+<section class="demos" id="demos">
+  <div class="s-label">Portfolio</div>
+  <h2 class="s-title">Live Demo <span>Websites</span></h2>
+  <p class="s-sub">Click any demo below to open a fully working website we've built. This is what your business website could look like.</p>
+
+  <div class="demos-grid">
+
+    <!-- 1. Titan Fitness -->
+    <div class="demo-card reveal">
+      <div class="demo-preview dp-gym">
+        <div class="demo-name-bg">FITNESS</div>
+        <div class="demo-emoji">🏋️</div>
+        <div class="demo-shine"></div>
+        <div class="demo-accent ac-gym"></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:#e8001d;">Fitness · Health</div>
+        <div class="demo-title">Titan Fitness</div>
+        <div class="demo-desc">Dark gym website with animated hero, membership plans, trainer profiles, gallery and WhatsApp contact.</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+          <a href="titan-fitness.html" target="_blank" class="demo-link">View Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Spice Garden -->
+    <div class="demo-card reveal d1">
+      <div class="demo-preview dp-restaurant">
+        <div class="demo-name-bg">SPICE</div>
+        <div class="demo-emoji">🍛</div>
+        <div class="demo-shine"></div>
+        <div class="demo-accent ac-restaurant"></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:#e8961e;">Food · Dining</div>
+        <div class="demo-title">Spice Garden</div>
+        <div class="demo-desc">Elegant restaurant website with animated menu tabs, dish gallery, reservation form and Google Maps.</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+          <a href="spice-garden.html" target="_blank" class="demo-link">View Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Royal Sweets -->
+    <div class="demo-card reveal d2">
+      <div class="demo-preview dp-sweets">
+        <div class="demo-name-bg">ROYAL</div>
+        <div class="demo-emoji">🍬</div>
+        <div class="demo-shine"></div>
+        <div class="demo-accent ac-sweets"></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:#e8a000;">Sweet Shop · Bakery</div>
+        <div class="demo-title">Royal Sweets</div>
+        <div class="demo-desc">Warm premium sweet shop with 6-category menu, festival offers, floating product cards and WhatsApp ordering.</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+          <a href="royal-sweets.html" target="_blank" class="demo-link">View Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. FastPrint Center -->
+    <div class="demo-card reveal d3">
+      <div class="demo-preview dp-print">
+        <div class="demo-name-bg">PRINT</div>
+        <div class="demo-emoji">🖨️</div>
+        <div class="demo-shine"></div>
+        <div class="demo-accent ac-print"></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:#0066ff;">Printing · Xerox</div>
+        <div class="demo-title">FastPrint Center</div>
+        <div class="demo-desc">Tech-style printing shop with live terminal animation, pricing cards, business hours and real-time open/closed badge.</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+          <a href="fastprint-center.html" target="_blank" class="demo-link">View Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. SmartTech Mobiles -->
+    <div class="demo-card reveal d4">
+      <div class="demo-preview dp-mobile">
+        <div class="demo-name-bg">MOBILE</div>
+        <div class="demo-emoji">📱</div>
+        <div class="demo-shine"></div>
+        <div class="demo-accent ac-mobile"></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:#9d5cff;">Electronics · Mobile</div>
+        <div class="demo-title">SmartTech Mobiles</div>
+        <div class="demo-desc">Premium phone shop with floating phone mockup, brand categories, 5-tab product catalog and WhatsApp enquiry.</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+          <a href="smarttech-mobiles.html" target="_blank" class="demo-link">View Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Krypton Web Studio (self) -->
+    <div class="demo-card reveal d5">
+      <div class="demo-preview dp-krypton">
+        <div class="demo-name-bg">AGENCY</div>
+        <div class="demo-emoji">💻</div>
+        <div class="demo-shine"></div>
+        <div class="demo-accent ac-krypton"></div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:#00ffcc;">Agency · Studio</div>
+        <div class="demo-title">Krypton Web Studio</div>
+        <div class="demo-desc">The very agency portfolio you're viewing right now — showcasing all demo websites with pricing and contact.</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+          <a href="krypton.html" target="_blank" class="demo-link">View Demo <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Coming Soon -->
+    <div class="demo-card reveal d6" style="grid-column:span 1;">
+      <div class="demo-preview dp-coming" style="position:relative;">
+        <div class="demo-name-bg">COMING</div>
+        <div class="demo-emoji" style="opacity:0.3;">🚀</div>
+        <div class="demo-coming-overlay">
+          <div class="coming-badge">Coming Soon</div>
+          <div style="font-size:13px;color:var(--grey);text-align:center;padding:0 20px;">Salon, Tuition, Medical & more demos launching soon</div>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-tag" style="color:var(--pink);">More Niches</div>
+        <div class="demo-title">10+ More Demos</div>
+        <div class="demo-desc">Salon, Tuition Centre, Clinic, Hotel, Boutique, Jewellery and more demo websites are being added. Stay tuned!</div>
+        <div class="demo-footer">
+          <div class="demo-tech"><span>More</span><span>Soon</span></div>
+          <a href="https://wa.me/919080644007?text=Hi!%20I%20want%20a%20custom%20niche%20website" target="_blank" class="demo-link" style="border-color:var(--pink);color:var(--pink);">Request Niche →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="s-label">What We Offer</div>
+  <h2 class="s-title">Our <span>Services</span></h2>
+  <p class="s-sub">Everything a local business needs to get online and start attracting customers — we handle it all.</p>
+
+  <div class="svc-grid">
+    <div class="svc reveal">
+      <div class="svc-num">01</div>
+      <div class="svc-icon">🎨</div>
+      <div class="svc-name">Business Website Design</div>
+      <div class="svc-desc">Custom designed website tailored to your business type, brand colours and target customers. No templates — every site is unique.</div>
+    </div>
+    <div class="svc reveal d1">
+      <div class="svc-num">02</div>
+      <div class="svc-icon">📱</div>
+      <div class="svc-name">Mobile Responsive Design</div>
+      <div class="svc-desc">Your website looks perfect on every device — phones, tablets, laptops. 80% of customers browse on mobile.</div>
+    </div>
+    <div class="svc reveal d2">
+      <div class="svc-num">03</div>
+      <div class="svc-icon">💬</div>
+      <div class="svc-name">WhatsApp Integration</div>
+      <div class="svc-desc">One-tap WhatsApp button so customers can contact you instantly. Pre-filled messages for faster conversion.</div>
+    </div>
+    <div class="svc reveal d3">
+      <div class="svc-num">04</div>
+      <div class="svc-icon">📍</div>
+      <div class="svc-name">Google Maps Setup</div>
+      <div class="svc-desc">Embedded Google Maps so customers can find your location easily and get directions with one tap.</div>
+    </div>
+    <div class="svc reveal d4">
+      <div class="svc-num">05</div>
+      <div class="svc-icon">⚡</div>
+      <div class="svc-name">3-Day Fast Delivery</div>
+      <div class="svc-desc">Your website is designed, built and handed over within 3 working days of confirming your order. No long waits.</div>
+    </div>
+    <div class="svc reveal d5">
+      <div class="svc-num">06</div>
+      <div class="svc-icon">🌐</div>
+      <div class="svc-name">Hosting & Domain Help</div>
+      <div class="svc-desc">We help you set up free Netlify hosting or connect your custom domain. Your site goes live on the same day of delivery.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="s-label">Simple Pricing</div>
+  <h2 class="s-title">Transparent <span>Plans</span></h2>
+  <p class="s-sub">No hidden fees. No recurring charges. Pay once — your website is yours forever.</p>
+
+  <div class="price-wrap">
+
+    <div class="pc reveal">
+      <div class="pc-top-line tl1"></div>
+      <div class="pc-tier">Basic Package</div>
+      <div class="pc-orig">₹6,449</div>
+      <div class="pc-price"><sup>₹</sup>4,449</div>
+      <div class="pc-save">You save ₹2,000 🎉</div>
+      <div class="pc-div"></div>
+      <ul class="pc-feats">
+        <li>Single Page Website</li>
+        <li>Mobile Responsive Design</li>
+        <li>WhatsApp Button</li>
+        <li>Google Maps Integration</li>
+        <li>Contact Form</li>
+        <li>3 Day Delivery</li>
+        <li>1 Month Free Support</li>
+      </ul>
+      <a href="https://wa.me/919080644007?text=Hi!%20I'm%20interested%20in%20the%20Basic%20Package%20-%20₹4449" target="_blank" class="pc-btn">Get Basic Package →</a>
+    </div>
+
+    <div class="pc hot reveal d1">
+      <div class="pc-top-line tl2"></div>
+      <div class="pc-badge">⭐ Best Value</div>
+      <div class="pc-tier">Premium Package</div>
+      <div class="pc-orig">₹8,849</div>
+      <div class="pc-price"><sup>₹</sup>6,149</div>
+      <div class="pc-save">You save ₹2,700 🔥</div>
+      <div class="pc-div"></div>
+      <ul class="pc-feats">
+        <li>Multi-Page Website (5 pages)</li>
+        <li>Premium Custom Design</li>
+        <li>WhatsApp + Call Button</li>
+        <li>Google Maps Integration</li>
+        <li>Contact & Enquiry Form</li>
+        <li>Photo Gallery Section</li>
+        <li>Basic SEO Setup</li>
+        <li>Free Hosting Setup Help</li>
+        <li>3 Month Free Support</li>
+      </ul>
+      <a href="https://wa.me/919080644007?text=Hi!%20I'm%20interested%20in%20the%20Premium%20Package%20-%20₹6149" target="_blank" class="pc-btn">Get Premium Package →</a>
+    </div>
+
+  </div>
+
+  <p style="margin-top:24px;font-size:13px;color:var(--muted);max-width:900px;">
+    * Domain & hosting (if needed) are separate. <a href="https://wa.me/919080644007" target="_blank" style="color:var(--c);text-decoration:none;">Chat with us</a> for custom requirements or bulk orders.
+  </p>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="s-label">Get Started</div>
+  <h2 class="s-title">Let's Build Your <span>Website</span></h2>
+  <p class="s-sub">Drop a message and we'll reply within minutes with a quote and timeline.</p>
+
+  <div class="contact-grid reveal">
+    <div class="cg-left">
+      <div class="cg-details">
+        <div class="cd-item">
+          <div class="cd-icon">💬</div>
+          <div><div class="cd-label">WhatsApp</div><div class="cd-val">+91 90806 44007</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">⚡</div>
+          <div><div class="cd-label">Response Time</div><div class="cd-val">Usually within 30 minutes</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">📍</div>
+          <div><div class="cd-label">Location</div><div class="cd-val">Chennai, Tamil Nadu, India</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">🚀</div>
+          <div><div class="cd-label">Delivery</div><div class="cd-val">3 Working Days</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">🌐</div>
+          <div><div class="cd-label">Serving</div><div class="cd-val">All of India · Remote friendly</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cg-right">
+      <div style="font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--c);margin-bottom:14px;position:relative;z-index:1;">Direct WhatsApp</div>
+      <div class="cg-number">+91 9080644007</div>
+      <div class="cg-sub">Tell us your business type and requirements. We'll send you a demo preview and quote within the hour.</div>
+      <a href="https://wa.me/919080644007?text=Hi%20Krypton%20Web%20Studio!%20I%20want%20a%20website%20for%20my%20business." target="_blank" class="wa-big">
+        💬 Start on WhatsApp
+      </a>
+      <div style="margin-top:24px;font-size:13px;color:var(--muted);line-height:1.8;position:relative;z-index:1;">
+        Tell us: your business name, type & what you need.<br>
+        We'll share a custom quote within the hour. ✅
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">
+    <div class="f-logo-dot"></div>
+    KRYPTON<span>.</span>
+  </div>
+  <p>© 2025 Krypton Web Studio · Chennai, India</p>
+  <p style="color:var(--c);font-size:12px;font-weight:600;letter-spacing:1px;">WEBSITES THAT BRING CUSTOMERS</p>
+</footer>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/919080644007?text=Hi%20Krypton!%20I%20need%20a%20website." target="_blank" class="float-wa">
+  <span style="font-size:18px;">💬</span>
+  <span>WhatsApp Us</span>
+</a>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 1500);
+});
+
+// Custom cursor
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 90);
+});
+document.querySelectorAll('a,button,.demo-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.transform = 'translate(-50%,-50%) scale(1.8)';
+    ring.style.borderColor = 'rgba(0,255,204,0.7)';
+    cur.style.transform = 'translate(-50%,-50%) scale(1.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'rgba(0,255,204,0.4)';
+    cur.style.transform = 'translate(-50%,-50%) scale(1)';
+  });
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Hamburger
+document.getElementById('ham').addEventListener('click', () => {
+  document.getElementById('mobNav').classList.toggle('open');
+});
+function closeM() { document.getElementById('mobNav').classList.remove('open'); }
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.classList.add('up');
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Counter animation
+function animCount(el, target, suffix) {
+  let n = 0;
+  const step = target / (1600 / 16);
+  const t = setInterval(() => {
+    n += step;
+    if (n >= target) { el.textContent = target + suffix; clearInterval(t); }
+    else el.textContent = Math.floor(n) + suffix;
+  }, 16);
+}
+
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.hn-num').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const txt = el.textContent;
+        const suffix = txt.replace(/[0-9]/g, '');
+        animCount(el, target, suffix);
+      });
+      cObs.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const numsEl = document.querySelector('.hero-nums');
+if (numsEl) cObs.observe(numsEl);
+</script>
+</body>
+</html>

@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spice Garden — Fine Indian Dining</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07060a;
+  --surface:#0e0c12;
+  --card:#141219;
+  --border:#1e1c26;
+  --border2:#2a2838;
+  --amber:#e8961e;
+  --amber2:#ffb347;
+  --amber-dim:rgba(232,150,30,0.1);
+  --amber-glow:rgba(232,150,30,0.22);
+  --cream:#f5efe6;
+  --white:#f8f4ee;
+  --grey:#9090a8;
+  --muted:#484860;
+  --red-spice:#c0392b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--amber);}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;transition:opacity 0.8s,visibility 0.8s;
+}
+#loader.hide{opacity:0;visibility:hidden;}
+.loader-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px;font-weight:700;
+  color:var(--amber);letter-spacing:6px;
+  animation:loaderFade 1.4s ease-in-out infinite;
+}
+.loader-sub{
+  font-size:11px;letter-spacing:6px;text-transform:uppercase;
+  color:var(--muted);margin-top:8px;
+}
+.loader-line{
+  width:0;height:1px;background:var(--amber);
+  margin-top:24px;animation:loaderLine 1.4s ease forwards 0.3s;
+}
+@keyframes loaderFade{0%,100%{opacity:0.3}50%{opacity:1}}
+@keyframes loaderLine{to{width:120px}}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:26px 6%;
+  transition:all 0.5s;
+}
+nav.scrolled{
+  background:rgba(7,6,10,0.96);
+  backdrop-filter:blur(24px);
+  padding:16px 6%;
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:700;
+  color:var(--white);text-decoration:none;
+  letter-spacing:2px;
+}
+.logo em{color:var(--amber);font-style:italic;}
+
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{
+  color:var(--grey);text-decoration:none;
+  font-size:13px;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;
+  transition:color 0.3s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;
+  height:1px;background:var(--amber);
+  transform:scaleX(0);transform-origin:center;
+  transition:transform 0.4s;
+}
+.nav-links a:hover{color:var(--amber);}
+.nav-links a:hover::after{transform:scaleX(1);}
+
+.nav-reserve{
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--amber);
+  color:var(--amber);padding:10px 24px;
+  font-size:12px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;
+  transition:all 0.4s;
+}
+.nav-reserve:hover{background:var(--amber);color:var(--bg);}
+
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;}
+.ham span{width:22px;height:1px;background:var(--white);display:block;transition:all 0.3s;}
+.mob-nav{
+  display:none;position:fixed;top:65px;left:0;right:0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:20px 6%;flex-direction:column;gap:16px;z-index:998;
+}
+.mob-nav.open{display:flex;}
+.mob-nav a{color:var(--grey);text-decoration:none;font-size:15px;padding:8px 0;border-bottom:1px solid var(--border);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:0 6%;
+  position:relative;overflow:hidden;
+}
+
+/* animated spice pattern bg */
+.hero-pattern{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 70% 80% at 80% 50%, rgba(232,150,30,0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 10% 80%, rgba(192,57,43,0.05) 0%, transparent 60%);
+}
+.hero-circles{position:absolute;inset:0;overflow:hidden;}
+.hc{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(232,150,30,0.06);
+  animation:circleExpand 8s ease-in-out infinite;
+}
+.hc1{width:600px;height:600px;right:-200px;top:50%;transform:translateY(-50%);animation-delay:0s;}
+.hc2{width:400px;height:400px;right:-100px;top:50%;transform:translateY(-50%);animation-delay:-2s;}
+.hc3{width:200px;height:200px;right:0;top:50%;transform:translateY(-50%);animation-delay:-4s;}
+@keyframes circleExpand{0%,100%{opacity:0.6;transform:translateY(-50%) scale(1);}50%{opacity:1;transform:translateY(-50%) scale(1.05);}}
+
+.hero-content{position:relative;z-index:2;max-width:680px;}
+
+.hero-tag{
+  display:inline-flex;align-items:center;gap:12px;
+  margin-bottom:28px;
+  animation:fadeUp 0.9s 0.3s ease both;
+}
+.htag-line{width:36px;height:1px;background:var(--amber);}
+.htag-text{
+  font-size:12px;font-weight:500;
+  letter-spacing:5px;text-transform:uppercase;
+  color:var(--amber);
+}
+
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(56px,9vw,112px);
+  font-weight:600;
+  line-height:0.9;
+  letter-spacing:-1px;
+  animation:fadeUp 0.9s 0.4s ease both;
+}
+.hero h1 em{
+  display:block;
+  font-style:italic;
+  color:var(--amber);
+}
+
+.hero-desc{
+  font-size:16px;color:var(--grey);
+  line-height:1.85;max-width:440px;
+  margin:28px 0 44px;font-weight:300;
+  animation:fadeUp 0.9s 0.6s ease both;
+}
+
+.hero-btns{
+  display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+  animation:fadeUp 0.9s 0.7s ease both;
+}
+
+.btn-reserve{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--amber);color:var(--bg);
+  padding:16px 36px;
+  font-family:'Jost',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all 0.4s;position:relative;overflow:hidden;
+}
+.btn-reserve::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+  transform:translateX(-100%);transition:transform 0.5s;
+}
+.btn-reserve:hover::after{transform:translateX(100%);}
+.btn-reserve:hover{background:var(--amber2);box-shadow:0 8px 40px var(--amber-glow);}
+
+.btn-menu{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--grey);font-size:13px;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;border:none;background:none;cursor:pointer;
+  transition:color 0.3s;
+}
+.btn-menu:hover{color:var(--amber);}
+
+/* floating food emojis */
+.food-float{
+  position:absolute;right:6%;top:50%;
+  transform:translateY(-50%);
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:16px;z-index:2;
+  animation:fadeUp 0.9s 0.5s ease both;
+}
+.ff-card{
+  width:180px;height:180px;
+  background:var(--card);
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  position:relative;overflow:hidden;
+  transition:all 0.5s cubic-bezier(0.23,1,0.32,1);
+  animation:cardFloat 4s ease-in-out infinite;
+}
+.ff-card:nth-child(2){animation-delay:-1s;}
+.ff-card:nth-child(3){animation-delay:-2s;}
+.ff-card:nth-child(4){animation-delay:-3s;}
+@keyframes cardFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
+.ff-card:hover{
+  border-color:var(--amber);
+  transform:translateY(-14px) scale(1.04)!important;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  animation-play-state:paused;
+}
+.ff-emoji{font-size:44px;}
+.ff-name{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+.ff-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,var(--amber-dim),transparent 70%);
+  opacity:0;transition:opacity 0.4s;
+}
+.ff-card:hover::before{opacity:1;}
+
+.hero-bottom{
+  position:absolute;bottom:48px;left:6%;right:6%;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  z-index:2;animation:fadeUp 0.9s 1s ease both;
+}
+.hero-tagline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-style:italic;
+  color:var(--muted);letter-spacing:1px;
+}
+.hero-scroll{
+  display:flex;align-items:center;gap:12px;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);
+}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--amber),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{0%{opacity:1;height:40px;}50%{opacity:0.4;height:24px;}100%{opacity:1;height:40px;}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── SECTION COMMON ── */
+section{padding:110px 6%;}
+.sec-tag{
+  display:flex;align-items:center;gap:14px;margin-bottom:16px;
+}
+.sec-tag-line{width:28px;height:1px;background:var(--amber);}
+.sec-tag span{
+  font-size:11px;font-weight:500;
+  letter-spacing:5px;text-transform:uppercase;color:var(--amber);
+}
+.sec-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,6vw,72px);
+  font-weight:600;letter-spacing:-1px;
+  line-height:1;color:var(--white);margin-bottom:16px;
+}
+.sec-title em{font-style:italic;color:var(--amber);}
+.sec-sub{
+  font-size:15px;color:var(--grey);
+  font-weight:300;line-height:1.8;
+  max-width:480px;margin-bottom:64px;
+}
+
+/* ── ABOUT STRIP ── */
+.about-strip{
+  background:var(--amber);
+  padding:28px 6%;
+  display:flex;gap:0;
+  overflow:hidden;
+}
+.about-strip-inner{
+  display:flex;gap:80px;align-items:center;
+  animation:stripScroll 20s linear infinite;
+  white-space:nowrap;
+}
+.strip-item{
+  display:flex;align-items:center;gap:14px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:600;
+  letter-spacing:1px;color:var(--bg);
+  flex-shrink:0;
+}
+.strip-dot{width:5px;height:5px;background:rgba(7,6,10,0.3);border-radius:50%;flex-shrink:0;}
+@keyframes stripScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── MENU ── */
+.menu-section{background:var(--surface);}
+
+.menu-tabs{
+  display:flex;gap:0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:56px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.menu-tabs::-webkit-scrollbar{display:none;}
+.tab-btn{
+  padding:16px 32px;
+  font-family:'Jost',sans-serif;
+  font-size:12px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--grey);background:none;border:none;
+  border-bottom:2px solid transparent;
+  cursor:pointer;transition:all 0.3s;
+  white-space:nowrap;flex-shrink:0;
+  position:relative;bottom:-1px;
+}
+.tab-btn:hover{color:var(--amber);}
+.tab-btn.active{
+  color:var(--amber);
+  border-bottom-color:var(--amber);
+}
+
+.menu-panel{display:none;}
+.menu-panel.active{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  animation:panelIn 0.5s ease;
+}
+@keyframes panelIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+.dish-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:28px;
+  display:flex;gap:20px;
+  align-items:flex-start;
+  transition:all 0.4s;
+  position:relative;overflow:hidden;
+}
+.dish-card::before{
+  content:'';position:absolute;
+  left:0;top:0;bottom:0;width:2px;
+  background:var(--amber);
+  transform:scaleY(0);transform-origin:bottom;
+  transition:transform 0.4s;
+}
+.dish-card:hover::before{transform:scaleY(1);}
+.dish-card:hover{
+  border-color:rgba(232,150,30,0.2);
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+.dish-emoji{font-size:40px;flex-shrink:0;line-height:1;}
+.dish-info{flex:1;}
+.dish-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:600;
+  color:var(--white);margin-bottom:6px;
+  letter-spacing:0.3px;
+}
+.dish-desc{font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:12px;}
+.dish-bottom{display:flex;justify-content:space-between;align-items:center;}
+.dish-price{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:600;
+  color:var(--amber);
+}
+.dish-tag{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 10px;
+  border:1px solid var(--border2);
+  color:var(--muted);
+  border-radius:100px;
+}
+.dish-tag.veg{border-color:rgba(0,180,80,0.3);color:#00b450;}
+.dish-tag.bestseller{border-color:rgba(232,150,30,0.4);color:var(--amber);}
+.dish-tag.spicy{border-color:rgba(192,57,43,0.4);color:#e05a4a;}
+
+/* ── GALLERY ── */
+.gallery-sec{background:var(--bg);}
+.gal-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:260px 200px;
+  gap:4px;
+}
+.gi{overflow:hidden;position:relative;background:var(--card);cursor:pointer;}
+.gi:nth-child(1){grid-column:span 4;grid-row:span 2;}
+.gi:nth-child(2){grid-column:span 5;}
+.gi:nth-child(3){grid-column:span 3;}
+.gi:nth-child(4){grid-column:span 3;}
+.gi:nth-child(5){grid-column:span 5;}
+
+.gi-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:64px;
+  transition:transform 0.7s cubic-bezier(0.23,1,0.32,1);
+  position:relative;
+}
+.gi:hover .gi-inner{transform:scale(1.1);}
+
+.gg1{background:linear-gradient(135deg,#1a0e00,#0f0800);}
+.gg2{background:linear-gradient(135deg,#1a0500,#0f0200);}
+.gg3{background:linear-gradient(135deg,#0f1200,#0a0e00);}
+.gg4{background:linear-gradient(135deg,#12000a,#0a0006);}
+.gg5{background:linear-gradient(135deg,#180d00,#100800);}
+
+.gi-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(232,150,30,0.9),transparent 60%);
+  opacity:0;transition:opacity 0.5s;
+  display:flex;align-items:flex-end;padding:20px;
+}
+.gi:hover .gi-overlay{opacity:1;}
+.gi-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:600;
+  letter-spacing:1px;color:var(--bg);
+}
+
+/* ── RESERVATION ── */
+.reservation{background:var(--surface);}
+.res-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:4px;border:1px solid var(--border);
+}
+.res-left{
+  background:var(--card);padding:64px;
+}
+.res-right{
+  background:linear-gradient(135deg,#110900,#0a0600);
+  padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.res-right::before{
+  content:'🍛';
+  position:absolute;font-size:200px;
+  bottom:-30px;right:-20px;opacity:0.07;
+  line-height:1;
+  animation:bgEmoji 6s ease-in-out infinite;
+}
+@keyframes bgEmoji{0%,100%{transform:rotate(-10deg);}50%{transform:rotate(10deg);}}
+
+.res-form{display:flex;flex-direction:column;gap:18px;}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.fg{display:flex;flex-direction:column;gap:8px;}
+.fg label{
+  font-size:10px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--grey);
+}
+.fg input,.fg select,.fg textarea{
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--white);padding:14px 16px;
+  font-family:'Jost',sans-serif;font-size:14px;
+  outline:none;transition:border-color 0.3s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--amber);}
+.fg select option{background:var(--surface);}
+.fg textarea{resize:vertical;min-height:100px;}
+
+.res-btn{
+  background:var(--amber);color:var(--bg);
+  padding:16px;border:none;cursor:pointer;
+  font-family:'Jost',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  transition:all 0.3s;position:relative;overflow:hidden;
+}
+.res-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  transform:translateX(-100%);transition:0.5s;
+}
+.res-btn:hover::after{transform:translateX(100%);}
+.res-btn:hover{background:var(--amber2);box-shadow:0 8px 40px var(--amber-glow);}
+
+.res-info{display:flex;flex-direction:column;gap:24px;}
+.ri-item{display:flex;align-items:flex-start;gap:16px;}
+.ri-icon{
+  width:44px;height:44px;
+  background:var(--amber-dim);
+  border:1px solid rgba(232,150,30,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.ri-label{
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:5px;
+}
+.ri-val{font-size:14px;color:var(--white);line-height:1.6;}
+
+/* ── MAP ── */
+.map-section{background:var(--bg);}
+.map-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:4px;border:1px solid var(--border);}
+.map-info{background:var(--card);padding:56px;display:flex;flex-direction:column;gap:26px;justify-content:center;}
+.mi-item{display:flex;align-items:flex-start;gap:16px;}
+.mi-icon{
+  width:44px;height:44px;
+  background:var(--amber-dim);
+  border:1px solid rgba(232,150,30,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.mi-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.mi-val{font-size:14px;color:var(--white);line-height:1.6;}
+.map-frame{min-height:420px;position:relative;overflow:hidden;}
+.map-frame iframe{width:100%;height:100%;border:none;min-height:420px;filter:grayscale(80%) invert(90%) hue-rotate(180deg);}
+
+/* ── CONTACT / WA ── */
+.contact-sec{background:var(--surface);}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:4px;border:1px solid var(--border);
+}
+.cg-left{
+  background:var(--card);padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.cg-right{
+  background:linear-gradient(135deg,#0a1100,#060a00);
+  padding:64px;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  border-left:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.cg-right::before{
+  content:'';position:absolute;
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(232,150,30,0.05),transparent 70%);
+  top:-100px;right:-100px;border-radius:50%;
+}
+
+.contact-heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,5vw,56px);
+  font-weight:600;letter-spacing:-1px;
+  color:var(--white);margin-bottom:12px;line-height:1;
+}
+.contact-heading em{font-style:italic;color:var(--amber);}
+.contact-sub{font-size:14px;color:var(--grey);line-height:1.7;margin-bottom:36px;}
+
+.wa-cta{
+  display:inline-flex;align-items:center;gap:14px;
+  background:#25D366;color:white;
+  padding:18px 36px;
+  font-family:'Jost',sans-serif;
+  font-size:13px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  text-decoration:none;
+  transition:all 0.4s;
+  box-shadow:0 0 40px rgba(37,211,102,0.15);
+}
+.wa-cta:hover{transform:translateY(-3px);box-shadow:0 12px 50px rgba(37,211,102,0.35);}
+.wa-cta .wai{font-size:22px;}
+
+.contact-details{display:flex;flex-direction:column;gap:20px;}
+.cd-item{display:flex;align-items:flex-start;gap:14px;}
+.cd-icon{
+  width:42px;height:42px;
+  background:var(--amber-dim);
+  border:1px solid rgba(232,150,30,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.cd-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.cd-val{font-size:14px;color:var(--white);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:36px 6%;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+}
+.f-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;font-weight:700;letter-spacing:2px;
+}
+.f-logo em{font-style:italic;color:var(--amber);}
+footer p{font-size:12px;color:var(--muted);}
+
+/* ── FLOAT WA ── */
+.float-wa{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  display:flex;align-items:center;gap:10px;
+  background:#25D366;color:white;
+  padding:13px 22px 13px 18px;border-radius:100px;
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+  text-decoration:none;
+  box-shadow:0 4px 30px rgba(37,211,102,0.3);
+  animation:waPulse 3s infinite;
+  transition:all 0.3s;
+}
+.float-wa:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(37,211,102,0.5);}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 30px rgba(37,211,102,0.3);}50%{box-shadow:0 4px 50px rgba(37,211,102,0.6);}}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.up{opacity:1;transform:translateY(0);}
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){
+  .food-float{display:none;}
+  .menu-panel.active{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:900px){
+  .res-inner{grid-template-columns:1fr;}
+  .map-wrap{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .cg-right{border-left:none;border-top:1px solid var(--border);}
+  .gal-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;}
+  .gi{grid-column:span 1!important;grid-row:span 1!important;height:200px;}
+}
+@media(max-width:768px){
+  nav{padding:16px 5%;}
+  .nav-links,.nav-reserve{display:none;}
+  .ham{display:flex;}
+  section{padding:70px 5%;}
+  .hero{padding:110px 5% 70px;}
+  .menu-panel.active{grid-template-columns:1fr;}
+  .res-left,.res-right,.cg-left,.cg-right{padding:36px;}
+  footer{flex-direction:column;text-align:center;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:52px;}
+  .hero-btns{flex-direction:column;align-items:flex-start;}
+  .form-row2{grid-template-columns:1fr;}
+  .float-wa span:last-child{display:none;}
+  .float-wa{border-radius:50%;padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Spice Garden</div>
+  <div class="loader-sub">Fine Indian Dining</div>
+  <div class="loader-line"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">Spice <em>Garden</em></a>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#reservation">Reserve</a></li>
+    <li><a href="#location">Location</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#reservation" class="nav-reserve">Reserve a Table</a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob-nav" id="mobNav">
+  <a href="#menu" onclick="closeM()">Menu</a>
+  <a href="#gallery" onclick="closeM()">Gallery</a>
+  <a href="#reservation" onclick="closeM()">Reservation</a>
+  <a href="#location" onclick="closeM()">Location</a>
+  <a href="#contact" onclick="closeM()">Contact</a>
+  <a href="https://wa.me/919876543210" target="_blank" style="color:#25D366!important">💬 Order on WhatsApp</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-pattern"></div>
+  <div class="hero-circles">
+    <div class="hc hc1"></div>
+    <div class="hc hc2"></div>
+    <div class="hc hc3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-tag">
+      <div class="htag-line"></div>
+      <span class="htag-text">Authentic Indian Cuisine · Est. 2012</span>
+    </div>
+    <h1>
+      Where Every<br>
+      <em>Spice</em><br>
+      Tells a Story
+    </h1>
+    <p class="hero-desc">
+      Experience the rich tapestry of Indian flavours — from smoky tandoors to fragrant biryanis, crafted with generations of culinary heritage and the freshest ingredients.
+    </p>
+    <div class="hero-btns">
+      <a href="#reservation" class="btn-reserve">Reserve a Table →</a>
+      <a href="#menu" class="btn-menu">Explore Menu ↓</a>
+    </div>
+  </div>
+
+  <!-- Floating food cards -->
+  <div class="food-float">
+    <div class="ff-card">
+      <div class="ff-emoji">🍛</div>
+      <div class="ff-name">Biryani</div>
+    </div>
+    <div class="ff-card">
+      <div class="ff-emoji">🍢</div>
+      <div class="ff-name">Kebabs</div>
+    </div>
+    <div class="ff-card">
+      <div class="ff-emoji">🥘</div>
+      <div class="ff-name">Curries</div>
+    </div>
+    <div class="ff-card">
+      <div class="ff-emoji">🍮</div>
+      <div class="ff-name">Desserts</div>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-tagline">"Every meal is a journey through India's finest kitchens"</div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-strip-inner">
+    <div class="strip-item">🍛 Authentic Recipes <div class="strip-dot"></div></div>
+    <div class="strip-item">🌿 Fresh Ingredients <div class="strip-dot"></div></div>
+    <div class="strip-item">🔥 Live Tandoor <div class="strip-dot"></div></div>
+    <div class="strip-item">⭐ 4.9 Star Rated <div class="strip-dot"></div></div>
+    <div class="strip-item">🏆 Best Restaurant 2024 <div class="strip-dot"></div></div>
+    <div class="strip-item">👨‍🍳 Master Chefs <div class="strip-dot"></div></div>
+    <div class="strip-item">🍛 Authentic Recipes <div class="strip-dot"></div></div>
+    <div class="strip-item">🌿 Fresh Ingredients <div class="strip-dot"></div></div>
+    <div class="strip-item">🔥 Live Tandoor <div class="strip-dot"></div></div>
+    <div class="strip-item">⭐ 4.9 Star Rated <div class="strip-dot"></div></div>
+    <div class="strip-item">🏆 Best Restaurant 2024 <div class="strip-dot"></div></div>
+    <div class="strip-item">👨‍🍳 Master Chefs <div class="strip-dot"></div></div>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="sec-tag"><div class="sec-tag-line"></div><span>Our Menu</span></div>
+  <h2 class="sec-title">A Feast of <em>Flavours</em></h2>
+  <p class="sec-sub">Every dish is crafted with hand-picked spices and time-honoured recipes from across India.</p>
+
+  <div class="menu-tabs">
+    <button class="tab-btn active" data-tab="starters">Starters</button>
+    <button class="tab-btn" data-tab="mains">Main Course</button>
+    <button class="tab-btn" data-tab="biryani">Biryani & Rice</button>
+    <button class="tab-btn" data-tab="breads">Breads</button>
+    <button class="tab-btn" data-tab="desserts">Desserts</button>
+    <button class="tab-btn" data-tab="drinks">Drinks</button>
+  </div>
+
+  <!-- Starters -->
+  <div class="menu-panel active" id="tab-starters">
+    <div class="dish-card reveal"><div class="dish-emoji">🍢</div><div class="dish-info"><div class="dish-name">Chicken Tikka</div><div class="dish-desc">Tender chicken marinated in spiced yogurt, grilled in tandoor to smoky perfection.</div><div class="dish-bottom"><div class="dish-price">₹299</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🧅</div><div class="dish-info"><div class="dish-name">Onion Bhaji</div><div class="dish-desc">Crispy golden fritters made with caramelized onions and aromatic spices.</div><div class="dish-bottom"><div class="dish-price">₹149</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🦐</div><div class="dish-info"><div class="dish-name">Tandoori Prawns</div><div class="dish-desc">Jumbo prawns marinated in saffron and spices, char-grilled in the tandoor.</div><div class="dish-bottom"><div class="dish-price">₹449</div><div class="dish-tag spicy">🌶 Spicy</div></div></div></div>
+    <div class="dish-card reveal"><div class="dish-emoji">🥗</div><div class="dish-info"><div class="dish-name">Paneer Tikka</div><div class="dish-desc">Marinated cottage cheese cubes grilled with capsicum and onions.</div><div class="dish-bottom"><div class="dish-price">₹249</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🍖</div><div class="dish-info"><div class="dish-name">Seekh Kebab</div><div class="dish-desc">Minced lamb mixed with herbs and spices, skewered and grilled in tandoor.</div><div class="dish-bottom"><div class="dish-price">₹349</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🥟</div><div class="dish-info"><div class="dish-name">Samosa Chaat</div><div class="dish-desc">Crispy samosas topped with tangy chutneys, yogurt and chaat masala.</div><div class="dish-bottom"><div class="dish-price">₹129</div><div class="dish-tag veg">Veg</div></div></div></div>
+  </div>
+
+  <!-- Mains -->
+  <div class="menu-panel" id="tab-mains">
+    <div class="dish-card reveal"><div class="dish-emoji">🍛</div><div class="dish-info"><div class="dish-name">Butter Chicken</div><div class="dish-desc">Slow-cooked chicken in rich tomato-butter gravy with aromatic spices.</div><div class="dish-bottom"><div class="dish-price">₹399</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🥘</div><div class="dish-info"><div class="dish-name">Dal Makhani</div><div class="dish-desc">Black lentils slow-cooked overnight in butter and cream — our signature dish.</div><div class="dish-bottom"><div class="dish-price">₹249</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🍖</div><div class="dish-info"><div class="dish-name">Lamb Rogan Josh</div><div class="dish-desc">Tender lamb slow-cooked with Kashmiri chillies and whole spices.</div><div class="dish-bottom"><div class="dish-price">₹549</div><div class="dish-tag spicy">🌶 Spicy</div></div></div></div>
+    <div class="dish-card reveal"><div class="dish-emoji">🍃</div><div class="dish-info"><div class="dish-name">Palak Paneer</div><div class="dish-desc">Fresh cottage cheese cubes in a velvety spinach and spice gravy.</div><div class="dish-bottom"><div class="dish-price">₹279</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🐟</div><div class="dish-info"><div class="dish-name">Fish Curry</div><div class="dish-desc">Fresh sea fish in a tangy coconut-based South Indian curry.</div><div class="dish-bottom"><div class="dish-price">₹449</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🥛</div><div class="dish-info"><div class="dish-name">Paneer Makhani</div><div class="dish-desc">Cottage cheese in rich buttery tomato gravy with fenugreek leaves.</div><div class="dish-bottom"><div class="dish-price">₹319</div><div class="dish-tag veg">Veg</div></div></div></div>
+  </div>
+
+  <!-- Biryani -->
+  <div class="menu-panel" id="tab-biryani">
+    <div class="dish-card reveal"><div class="dish-emoji">🍛</div><div class="dish-info"><div class="dish-name">Hyderabadi Dum Biryani</div><div class="dish-desc">Aromatic basmati rice layered with tender mutton and slow-cooked in a sealed pot.</div><div class="dish-bottom"><div class="dish-price">₹499</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🍗</div><div class="dish-info"><div class="dish-name">Chicken Biryani</div><div class="dish-desc">Fragrant long-grain rice with spiced chicken, fried onions and saffron.</div><div class="dish-bottom"><div class="dish-price">₹369</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🌱</div><div class="dish-info"><div class="dish-name">Veg Dum Biryani</div><div class="dish-desc">Garden vegetables and paneer layered with saffron-infused basmati rice.</div><div class="dish-bottom"><div class="dish-price">₹289</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal"><div class="dish-emoji">🍳</div><div class="dish-info"><div class="dish-name">Egg Biryani</div><div class="dish-desc">Perfectly spiced biryani rice with masala-coated boiled eggs.</div><div class="dish-bottom"><div class="dish-price">₹249</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🦐</div><div class="dish-info"><div class="dish-name">Prawn Biryani</div><div class="dish-desc">Coastal-style biryani with succulent prawns marinated in coconut masala.</div><div class="dish-bottom"><div class="dish-price">₹549</div><div class="dish-tag spicy">🌶 Spicy</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🧄</div><div class="dish-info"><div class="dish-name">Jeera Rice</div><div class="dish-desc">Basmati rice tempered with cumin seeds, ghee and fresh coriander.</div><div class="dish-bottom"><div class="dish-price">₹149</div><div class="dish-tag veg">Veg</div></div></div></div>
+  </div>
+
+  <!-- Breads -->
+  <div class="menu-panel" id="tab-breads">
+    <div class="dish-card reveal"><div class="dish-emoji">🫓</div><div class="dish-info"><div class="dish-name">Garlic Naan</div><div class="dish-desc">Soft leavened bread topped with roasted garlic and fresh butter.</div><div class="dish-bottom"><div class="dish-price">₹89</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🥙</div><div class="dish-info"><div class="dish-name">Stuffed Paratha</div><div class="dish-desc">Whole wheat flatbread stuffed with spiced potato or paneer, served with butter.</div><div class="dish-bottom"><div class="dish-price">₹129</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🫓</div><div class="dish-info"><div class="dish-name">Tandoori Roti</div><div class="dish-desc">Unleavened whole wheat bread baked fresh in the clay tandoor.</div><div class="dish-bottom"><div class="dish-price">₹49</div><div class="dish-tag veg">Veg</div></div></div></div>
+  </div>
+
+  <!-- Desserts -->
+  <div class="menu-panel" id="tab-desserts">
+    <div class="dish-card reveal"><div class="dish-emoji">🍮</div><div class="dish-info"><div class="dish-name">Gulab Jamun</div><div class="dish-desc">Soft milk-solid dumplings soaked in rose-cardamom sugar syrup.</div><div class="dish-bottom"><div class="dish-price">₹129</div><div class="dish-tag bestseller">Bestseller</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🍨</div><div class="dish-info"><div class="dish-name">Kulfi Falooda</div><div class="dish-desc">Traditional Indian ice cream with rose syrup, basil seeds and vermicelli.</div><div class="dish-bottom"><div class="dish-price">₹149</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🍚</div><div class="dish-info"><div class="dish-name">Kheer</div><div class="dish-desc">Creamy rice pudding slow-cooked with milk, saffron, cardamom and dry fruits.</div><div class="dish-bottom"><div class="dish-price">₹119</div><div class="dish-tag veg">Veg</div></div></div></div>
+  </div>
+
+  <!-- Drinks -->
+  <div class="menu-panel" id="tab-drinks">
+    <div class="dish-card reveal"><div class="dish-emoji">🥭</div><div class="dish-info"><div class="dish-name">Mango Lassi</div><div class="dish-desc">Thick chilled yogurt blended with fresh Alphonso mangoes and cardamom.</div><div class="dish-bottom"><div class="dish-price">₹129</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d1"><div class="dish-emoji">🌹</div><div class="dish-info"><div class="dish-name">Rose Sharbat</div><div class="dish-desc">Chilled rose syrup drink with basil seeds and a hint of saffron.</div><div class="dish-bottom"><div class="dish-price">₹89</div><div class="dish-tag veg">Veg</div></div></div></div>
+    <div class="dish-card reveal d2"><div class="dish-emoji">🍵</div><div class="dish-info"><div class="dish-name">Masala Chai</div><div class="dish-desc">Freshly brewed tea with ginger, cardamom, cinnamon and lemongrass.</div><div class="dish-bottom"><div class="dish-price">₹69</div><div class="dish-tag veg">Veg</div></div></div></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-sec" id="gallery">
+  <div class="sec-tag"><div class="sec-tag-line"></div><span>Gallery</span></div>
+  <h2 class="sec-title">A Visual <em>Feast</em></h2>
+  <p class="sec-sub">A glimpse into our kitchen, our space, and the dishes that keep guests coming back.</p>
+
+  <div class="gal-grid">
+    <div class="gi reveal"><div class="gi-inner gg1">🍛</div><div class="gi-overlay"><span class="gi-label">Signature Biryani</span></div></div>
+    <div class="gi reveal d1"><div class="gi-inner gg2">🍢</div><div class="gi-overlay"><span class="gi-label">Live Tandoor</span></div></div>
+    <div class="gi reveal d2"><div class="gi-inner gg3">🥘</div><div class="gi-overlay"><span class="gi-label">Rich Curries</span></div></div>
+    <div class="gi reveal d1"><div class="gi-inner gg4">🍮</div><div class="gi-overlay"><span class="gi-label">Indian Desserts</span></div></div>
+    <div class="gi reveal d2"><div class="gi-inner gg5">🕯️</div><div class="gi-overlay"><span class="gi-label">Dining Ambience</span></div></div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation" id="reservation">
+  <div class="sec-tag"><div class="sec-tag-line"></div><span>Book a Table</span></div>
+  <h2 class="sec-title">Reserve Your <em>Evening</em></h2>
+  <p class="sec-sub">Secure your table for an unforgettable dining experience. We accommodate groups of all sizes.</p>
+
+  <div class="res-inner reveal">
+    <div class="res-left">
+      <form class="res-form" onsubmit="submitRes(event)">
+        <div class="form-row2">
+          <div class="fg"><label>Full Name</label><input type="text" placeholder="Arjun Sharma" required></div>
+          <div class="fg"><label>Phone</label><input type="tel" placeholder="+91 98765 43210" required></div>
+        </div>
+        <div class="form-row2">
+          <div class="fg"><label>Date</label><input type="date" required></div>
+          <div class="fg"><label>Time</label>
+            <select>
+              <option>12:00 PM</option><option>12:30 PM</option>
+              <option>01:00 PM</option><option>01:30 PM</option>
+              <option>07:00 PM</option><option>07:30 PM</option>
+              <option>08:00 PM</option><option>08:30 PM</option>
+              <option>09:00 PM</option><option>09:30 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row2">
+          <div class="fg"><label>Guests</label>
+            <select>
+              <option>1 Guest</option><option>2 Guests</option>
+              <option>3 Guests</option><option>4 Guests</option>
+              <option>5 Guests</option><option>6+ Guests</option>
+            </select>
+          </div>
+          <div class="fg"><label>Occasion</label>
+            <select>
+              <option>Regular Dining</option><option>Birthday</option>
+              <option>Anniversary</option><option>Business Dinner</option>
+              <option>Family Gathering</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label>Special Requests</label><textarea placeholder="Any dietary requirements, preferences or special arrangements..."></textarea></div>
+        <button type="submit" class="res-btn" id="resBtn">Confirm Reservation →</button>
+      </form>
+    </div>
+
+    <div class="res-right">
+      <div class="res-info">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--white);margin-bottom:32px;line-height:1.2;">
+          "An evening of <em style="color:var(--amber);font-style:italic;">flavour</em> awaits you"
+        </div>
+        <div class="ri-item">
+          <div class="ri-icon">🕐</div>
+          <div><div class="ri-label">Lunch Hours</div><div class="ri-val">12:00 PM – 3:30 PM</div></div>
+        </div>
+        <div class="ri-item">
+          <div class="ri-icon">🌙</div>
+          <div><div class="ri-label">Dinner Hours</div><div class="ri-val">7:00 PM – 11:00 PM</div></div>
+        </div>
+        <div class="ri-item">
+          <div class="ri-icon">👥</div>
+          <div><div class="ri-label">Private Dining</div><div class="ri-val">Available for 10–50 guests</div></div>
+        </div>
+        <div class="ri-item">
+          <div class="ri-icon">📞</div>
+          <div><div class="ri-label">Direct Booking</div><div class="ri-val">+91 98765 43210</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section" id="location">
+  <div class="sec-tag"><div class="sec-tag-line"></div><span>Find Us</span></div>
+  <h2 class="sec-title">Come <em>Dine</em> With Us</h2>
+  <p class="sec-sub">Located in the heart of Chennai, easily accessible with ample parking.</p>
+
+  <div class="map-wrap reveal">
+    <div class="map-info">
+      <div class="mi-item">
+        <div class="mi-icon">📍</div>
+        <div><div class="mi-label">Address</div><div class="mi-val">24, Cathedral Road, Gopalapuram<br>Chennai, Tamil Nadu 600086</div></div>
+      </div>
+      <div class="mi-item">
+        <div class="mi-icon">🕐</div>
+        <div><div class="mi-label">Hours</div><div class="mi-val">Lunch: 12PM – 3:30PM<br>Dinner: 7PM – 11PM<br>Open all 7 days</div></div>
+      </div>
+      <div class="mi-item">
+        <div class="mi-icon">📞</div>
+        <div><div class="mi-label">Reservations</div><div class="mi-val">+91 98765 43210</div></div>
+      </div>
+      <div class="mi-item">
+        <div class="mi-icon">🚗</div>
+        <div><div class="mi-label">Parking</div><div class="mi-val">Valet parking available daily</div></div>
+      </div>
+    </div>
+    <div class="map-frame">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.8!2d80.2558!3d13.0520!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDAzJzA3LjIiTiA4MMKwMTUnMjEuOSJF!5e0!3m2!1sen!2sin!4v1234567890" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / WA -->
+<section class="contact-sec" id="contact">
+  <div class="sec-tag"><div class="sec-tag-line"></div><span>Order & Connect</span></div>
+
+  <div class="contact-grid reveal">
+    <div class="cg-left">
+      <div class="contact-details">
+        <div class="cd-item">
+          <div class="cd-icon">📞</div>
+          <div><div class="cd-label">Phone</div><div class="cd-val">+91 98765 43210</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">✉️</div>
+          <div><div class="cd-label">Email</div><div class="cd-val">hello@spicegarden.in</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">📍</div>
+          <div><div class="cd-label">Location</div><div class="cd-val">24, Cathedral Road, Chennai</div></div>
+        </div>
+        <div class="cd-item">
+          <div class="cd-icon">🚚</div>
+          <div><div class="cd-label">Home Delivery</div><div class="cd-val">Available via Zomato & Swiggy</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cg-right">
+      <div class="contact-heading">Order<br>on <em>WhatsApp</em></div>
+      <div class="contact-sub">Send us your order directly or ask about today's specials. We respond within minutes.</div>
+      <a href="https://wa.me/919876543210?text=Hi%20Spice%20Garden!%20I%20want%20to%20place%20an%20order." target="_blank" class="wa-cta">
+        <span class="wai">💬</span>
+        Order on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Spice <em>Garden</em></div>
+  <p>© 2025 Spice Garden · Fine Indian Dining · Chennai</p>
+  <p style="color:var(--amber);font-size:12px;font-weight:600;letter-spacing:2px;">WHERE EVERY SPICE TELLS A STORY</p>
+</footer>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/919876543210?text=Hi%20Spice%20Garden!" target="_blank" class="float-wa">
+  <span style="font-size:20px;">💬</span>
+  <span>Order Now</span>
+</a>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 1400);
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Hamburger
+document.getElementById('ham').addEventListener('click', () => {
+  document.getElementById('mobNav').classList.toggle('open');
+});
+function closeM(){ document.getElementById('mobNav').classList.remove('open'); }
+
+// Menu tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('tab-' + btn.dataset.tab);
+    if(panel){
+      panel.classList.add('active');
+      // re-trigger reveal for new panel items
+      panel.querySelectorAll('.reveal').forEach(el => {
+        el.classList.remove('up');
+        setTimeout(() => el.classList.add('up'), 50);
+      });
+    }
+  });
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('up'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Trigger visible panels on load
+document.querySelectorAll('.menu-panel.active .reveal').forEach(el => {
+  setTimeout(() => el.classList.add('up'), 200);
+});
+
+// Reservation submit
+function submitRes(e){
+  e.preventDefault();
+  const btn = document.getElementById('resBtn');
+  btn.textContent = '✅ Reservation Confirmed!';
+  btn.style.background = '#25D366';
+  setTimeout(() => {
+    btn.textContent = 'Confirm Reservation →';
+    btn.style.background = 'var(--amber)';
+    e.target.reset();
+  }, 3500);
+}
+</script>
+</body>
+</html>

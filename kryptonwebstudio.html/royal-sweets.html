@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Sweets — Taste the Tradition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0800;
+  --surface:#130f00;
+  --card:#1a1400;
+  --border:#2a2200;
+  --border2:#3a3000;
+  --gold:#e8a000;
+  --gold2:#ffbf33;
+  --gold-light:#ffd166;
+  --gold-dim:rgba(232,160,0,0.12);
+  --gold-glow:rgba(232,160,0,0.28);
+  --rose:#e8394a;
+  --rose-dim:rgba(232,57,74,0.1);
+  --saffron:#ff6b1a;
+  --cream:#fff8ec;
+  --white:#fff9f0;
+  --grey:#b0a080;
+  --muted:#6a5a30;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--gold);}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;transition:opacity 0.8s,visibility 0.8s;
+}
+#loader.hide{opacity:0;visibility:hidden;}
+.loader-emoji{font-size:60px;animation:loaderBounce 0.8s ease-in-out infinite alternate;}
+.loader-name{
+  font-family:'Playfair Display',serif;
+  font-size:44px;font-weight:900;
+  color:var(--gold);letter-spacing:3px;
+  margin-top:12px;
+  animation:loaderGlow 1.5s ease-in-out infinite;
+}
+.loader-bar{
+  width:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  margin-top:20px;border-radius:2px;
+  animation:loaderBarAnim 1.4s ease forwards 0.2s;
+}
+@keyframes loaderBounce{from{transform:translateY(0);}to{transform:translateY(-12px);}}
+@keyframes loaderGlow{0%,100%{text-shadow:0 0 20px var(--gold-glow);}50%{text-shadow:0 0 50px var(--gold-glow),0 0 100px rgba(232,160,0,0.1);}}
+@keyframes loaderBarAnim{to{width:140px;}}
+
+/* ── PARTICLES (decorative dots) ── */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{
+  position:absolute;border-radius:50%;
+  background:var(--gold);
+  animation:particleDrift linear infinite;
+  opacity:0;
+}
+@keyframes particleDrift{
+  0%{opacity:0;transform:translateY(100vh) scale(0);}
+  10%{opacity:0.6;}
+  90%{opacity:0.2;}
+  100%{opacity:0;transform:translateY(-100px) scale(1);}
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px 6%;transition:all 0.5s;
+}
+nav.scrolled{
+  background:rgba(13,8,0,0.97);
+  backdrop-filter:blur(24px);
+  padding:14px 6%;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 4px 40px rgba(0,0,0,0.6);
+}
+.logo{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;
+}
+.logo-icon{
+  width:42px;height:42px;
+  background:var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  box-shadow:0 0 20px var(--gold-glow);
+  animation:logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 20px var(--gold-glow);}50%{box-shadow:0 0 40px var(--gold-glow),0 0 60px rgba(232,160,0,0.1);}}
+.logo-text{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:700;
+  color:var(--white);letter-spacing:1px;
+}
+.logo-text span{color:var(--gold);}
+
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{
+  color:var(--grey);text-decoration:none;
+  font-size:13px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  transition:color 0.3s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:50%;right:50%;
+  height:2px;background:var(--gold);border-radius:2px;
+  transition:all 0.3s;
+}
+.nav-links a:hover{color:var(--gold);}
+.nav-links a:hover::after{left:0;right:0;}
+
+.nav-order{
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--bg);padding:11px 26px;
+  font-family:'Nunito',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  text-decoration:none;border-radius:100px;
+  transition:all 0.3s;
+  box-shadow:0 4px 20px var(--gold-glow);
+}
+.nav-order:hover{transform:translateY(-2px);box-shadow:0 8px 40px var(--gold-glow);}
+
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;}
+.ham span{width:22px;height:2px;background:var(--white);display:block;transition:all 0.3s;border-radius:2px;}
+.mob-nav{
+  display:none;position:fixed;top:65px;left:0;right:0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:20px 6%;flex-direction:column;gap:16px;z-index:998;
+}
+.mob-nav.open{display:flex;}
+.mob-nav a{color:var(--grey);text-decoration:none;font-size:15px;padding:8px 0;border-bottom:1px solid var(--border);}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:100px 6% 60px;
+  position:relative;overflow:hidden;
+}
+
+/* radial warm glow bg */
+.hero-glow{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 80% 50%,rgba(232,160,0,0.07) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 50% at 20% 80%,rgba(255,107,26,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse 30% 40% at 50% 10%,rgba(232,57,74,0.04) 0%,transparent 50%);
+}
+
+/* ornamental circles */
+.hero-orns{position:absolute;right:0;top:0;bottom:0;width:50%;pointer-events:none;}
+.orn{
+  position:absolute;border-radius:50%;
+  border:1px dashed rgba(232,160,0,0.12);
+  animation:ornSpin linear infinite;
+}
+.orn1{width:700px;height:700px;top:50%;right:-200px;transform:translateY(-50%);animation-duration:60s;}
+.orn2{width:500px;height:500px;top:50%;right:-100px;transform:translateY(-50%);animation-duration:40s;animation-direction:reverse;}
+.orn3{width:300px;height:300px;top:50%;right:0;transform:translateY(-50%);animation-duration:25s;}
+@keyframes ornSpin{from{transform:translateY(-50%) rotate(0deg);}to{transform:translateY(-50%) rotate(360deg);}}
+
+.hero-left{position:relative;z-index:2;max-width:600px;}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold-dim);
+  border:1px solid rgba(232,160,0,0.25);
+  padding:8px 18px;border-radius:100px;
+  font-size:12px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:28px;
+  animation:fadeUp 0.9s 0.2s ease both;
+}
+.badge-star{font-size:14px;animation:starSpin 3s linear infinite;}
+@keyframes starSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(52px,8vw,100px);
+  font-weight:900;line-height:0.95;
+  letter-spacing:-1px;
+  animation:fadeUp 0.9s 0.3s ease both;
+}
+.hero h1 .line-gold{
+  color:var(--gold);
+  text-shadow:0 0 60px rgba(232,160,0,0.3);
+}
+.hero h1 .line-outline{
+  -webkit-text-stroke:1.5px var(--gold-light);
+  color:transparent;
+}
+
+.hero-tagline{
+  font-size:16px;color:var(--grey);
+  font-style:italic;margin-top:16px;
+  letter-spacing:0.5px;
+  animation:fadeUp 0.9s 0.45s ease both;
+}
+
+.hero-desc{
+  font-size:16px;color:var(--grey);
+  line-height:1.8;max-width:440px;
+  margin:20px 0 40px;font-weight:400;
+  animation:fadeUp 0.9s 0.55s ease both;
+}
+
+.hero-btns{
+  display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+  animation:fadeUp 0.9s 0.65s ease both;
+}
+
+.btn-order-wa{
+  display:inline-flex;align-items:center;gap:12px;
+  background:#25D366;color:white;
+  padding:16px 32px;border-radius:100px;
+  font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:1px;text-decoration:none;
+  transition:all 0.4s;
+  box-shadow:0 4px 30px rgba(37,211,102,0.25);
+}
+.btn-order-wa:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(37,211,102,0.45);}
+
+.btn-view-menu{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--bg);padding:16px 32px;border-radius:100px;
+  font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:1px;text-decoration:none;
+  transition:all 0.4s;
+  box-shadow:0 4px 24px var(--gold-glow);
+}
+.btn-view-menu:hover{transform:translateY(-3px);box-shadow:0 8px 40px var(--gold-glow);}
+
+.hero-stats{
+  display:flex;gap:36px;margin-top:56px;
+  padding-top:36px;border-top:1px solid var(--border);
+  animation:fadeUp 0.9s 0.8s ease both;
+}
+.hs-num{
+  font-family:'Playfair Display',serif;
+  font-size:36px;font-weight:700;
+  color:var(--gold);line-height:1;
+}
+.hs-label{font-size:12px;color:var(--muted);margin-top:5px;letter-spacing:0.5px;}
+
+/* sweets float right */
+.hero-sweets{
+  position:absolute;right:5%;top:50%;
+  transform:translateY(-50%);
+  z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;
+  animation:fadeUp 0.9s 0.5s ease both;
+}
+.sw-card{
+  width:160px;height:160px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:10px;cursor:pointer;
+  transition:all 0.5s cubic-bezier(0.23,1,0.32,1);
+  position:relative;overflow:hidden;
+}
+.sw-card:nth-child(odd){animation:swFloat 4s ease-in-out infinite;}
+.sw-card:nth-child(even){animation:swFloat 4s ease-in-out infinite;animation-delay:-2s;}
+@keyframes swFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.sw-card:hover{
+  border-color:var(--gold);
+  transform:translateY(-16px) scale(1.06)!important;
+  box-shadow:0 24px 60px rgba(0,0,0,0.5),0 0 30px var(--gold-glow);
+  animation-play-state:paused;
+}
+.sw-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,var(--gold-dim),transparent 70%);
+  opacity:0;transition:opacity 0.4s;border-radius:16px;
+}
+.sw-card:hover::before{opacity:1;}
+.sw-emoji{font-size:46px;line-height:1;}
+.sw-name{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+.sw-price{
+  font-family:'Playfair Display',serif;
+  font-size:14px;font-weight:600;color:var(--gold);
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── MARQUEE ── */
+.marquee-wrap{
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  padding:0;
+}
+.marquee-inner{padding:16px 0;}
+.marquee-track{
+  display:flex;gap:0;
+  animation:mq 22s linear infinite;
+  white-space:nowrap;
+}
+.mq-item{
+  display:flex;align-items:center;gap:16px;
+  padding:0 32px;
+  font-family:'Playfair Display',serif;
+  font-size:15px;font-weight:700;
+  letter-spacing:1px;color:var(--bg);
+  flex-shrink:0;
+}
+.mq-dot{width:5px;height:5px;background:rgba(13,8,0,0.3);border-radius:50();}
+@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTIONS ── */
+section{padding:110px 6%;}
+.sec-kicker{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:11px;font-weight:700;
+  letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.kicker-ornament{font-size:16px;}
+.sec-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(38px,6vw,70px);
+  font-weight:900;line-height:1;
+  color:var(--white);margin-bottom:14px;
+  letter-spacing:-0.5px;
+}
+.sec-title em{font-style:italic;color:var(--gold);}
+.sec-sub{
+  font-size:15px;color:var(--grey);
+  line-height:1.8;max-width:480px;
+  margin-bottom:64px;font-weight:400;
+}
+
+/* ── CATEGORIES ── */
+.cat-section{background:var(--surface);}
+
+.cat-tabs{
+  display:flex;gap:0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:56px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.cat-tab{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 32px;
+  background:none;border:none;
+  border-bottom:2px solid transparent;
+  font-family:'Nunito',sans-serif;
+  font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;
+  transition:all 0.3s;
+  white-space:nowrap;flex-shrink:0;
+  position:relative;bottom:-1px;
+}
+.cat-tab:hover{color:var(--gold);}
+.cat-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.cat-tab-emoji{font-size:18px;}
+
+.cat-panel{display:none;}
+.cat-panel.active{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  animation:panelIn 0.5s ease;
+}
+@keyframes panelIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* product card */
+.prod-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  position:relative;
+  transition:all 0.45s cubic-bezier(0.23,1,0.32,1);
+  cursor:pointer;
+}
+.prod-card:hover{
+  border-color:var(--gold);
+  transform:translateY(-8px);
+  box-shadow:0 24px 60px rgba(0,0,0,0.4),0 0 30px var(--gold-glow);
+}
+.prod-img{
+  height:200px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:70px;
+  transition:transform 0.5s;
+  position:relative;overflow:hidden;
+}
+.prod-card:hover .prod-img{transform:scale(1.08);}
+.pi1{background:radial-gradient(ellipse at 50% 30%,#2a1800,#1a1000);}
+.pi2{background:radial-gradient(ellipse at 50% 30%,#1a0a0a,#120505);}
+.pi3{background:radial-gradient(ellipse at 50% 30%,#1a1a0a,#121200);}
+.pi4{background:radial-gradient(ellipse at 50% 30%,#1a0a14,#120008);}
+.pi5{background:radial-gradient(ellipse at 50% 30%,#1a1000,#120a00);}
+.pi6{background:radial-gradient(ellipse at 50% 30%,#0a1a0a,#001200);}
+.pi7{background:radial-gradient(ellipse at 50% 30%,#1a1a1a,#101010);}
+.pi8{background:radial-gradient(ellipse at 50% 30%,#1a0810,#120005);}
+
+.prod-img-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 50%,var(--gold-dim),transparent 70%);
+  opacity:0;transition:opacity 0.4s;
+}
+.prod-card:hover .prod-img-glow{opacity:1;}
+
+.prod-badge{
+  position:absolute;top:12px;left:12px;
+  background:var(--gold);color:var(--bg);
+  font-size:10px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:100px;
+}
+.prod-badge.new{background:var(--rose);}
+.prod-badge.offer{background:var(--saffron);}
+
+.prod-body{padding:20px;}
+.prod-name{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:700;
+  color:var(--white);margin-bottom:6px;
+}
+.prod-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+.prod-footer{display:flex;justify-content:space-between;align-items:center;}
+.prod-price{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;color:var(--gold);
+}
+.prod-wa{
+  display:flex;align-items:center;gap:6px;
+  background:#25D366;color:white;
+  padding:8px 14px;border-radius:100px;
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;text-decoration:none;
+  transition:all 0.3s;opacity:0;transform:translateX(10px);
+}
+.prod-card:hover .prod-wa{opacity:1;transform:translateX(0);}
+.prod-wa:hover{box-shadow:0 4px 16px rgba(37,211,102,0.4);}
+
+/* ── OFFERS ── */
+.offers{background:var(--bg);}
+
+.offers-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.offer-card{
+  position:relative;overflow:hidden;
+  border-radius:16px;
+  padding:40px 32px;
+  border:1px solid var(--border);
+  background:var(--card);
+  transition:all 0.45s cubic-bezier(0.23,1,0.32,1);
+  cursor:pointer;
+}
+.offer-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 28px 70px rgba(0,0,0,0.5);
+}
+.offer-card.eid{border-color:rgba(232,160,0,0.3);background:linear-gradient(135deg,#1a1000,var(--card));}
+.offer-card.diwali{border-color:rgba(255,107,26,0.3);background:linear-gradient(135deg,#1a0800,var(--card));}
+.offer-card.wedding{border-color:rgba(232,57,74,0.3);background:linear-gradient(135deg,#1a0005,var(--card));}
+
+.offer-card::before{
+  content:'';position:absolute;inset:0;
+  opacity:0;transition:opacity 0.4s;
+}
+.offer-card.eid::before{background:radial-gradient(circle at 100% 0%,var(--gold-dim),transparent 60%);}
+.offer-card.diwali::before{background:radial-gradient(circle at 100% 0%,rgba(255,107,26,0.1),transparent 60%);}
+.offer-card.wedding::before{background:radial-gradient(circle at 100% 0%,var(--rose-dim),transparent 60%);}
+.offer-card:hover::before{opacity:1;}
+
+.offer-emoji{font-size:52px;margin-bottom:20px;display:block;}
+.offer-tag{
+  font-size:10px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.eid .offer-tag{color:var(--gold);}
+.diwali .offer-tag{color:var(--saffron);}
+.wedding .offer-tag{color:var(--rose);}
+.offer-title{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:700;
+  color:var(--white);margin-bottom:10px;
+  line-height:1.2;
+}
+.offer-desc{font-size:13px;color:var(--grey);line-height:1.7;margin-bottom:24px;}
+.offer-discount{
+  display:inline-block;
+  font-family:'Playfair Display',serif;
+  font-size:32px;font-weight:900;
+  margin-bottom:20px;
+  line-height:1;
+}
+.eid .offer-discount{color:var(--gold);}
+.diwali .offer-discount{color:var(--saffron);}
+.wedding .offer-discount{color:var(--rose);}
+.offer-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;border-radius:100px;
+  font-size:12px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;text-decoration:none;
+  transition:all 0.3s;border:1px solid;
+}
+.eid .offer-cta{border-color:var(--gold);color:var(--gold);}
+.diwali .offer-cta{border-color:var(--saffron);color:var(--saffron);}
+.wedding .offer-cta{border-color:var(--rose);color:var(--rose);}
+.offer-card:hover .offer-cta{color:var(--bg);}
+.eid:hover .offer-cta{background:var(--gold);}
+.diwali:hover .offer-cta{background:var(--saffron);}
+.wedding:hover .offer-cta{background:var(--rose);}
+
+.offer-bg-text{
+  position:absolute;right:-10px;top:50%;transform:translateY(-50%);
+  font-family:'Playfair Display',serif;
+  font-size:100px;font-weight:900;
+  line-height:1;pointer-events:none;opacity:0.04;
+  color:var(--white);
+}
+
+/* ── GALLERY ── */
+.gallery-sec{background:var(--surface);}
+.gal-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:260px 200px;
+  gap:6px;
+}
+.gi{overflow:hidden;position:relative;background:var(--card);cursor:pointer;border-radius:8px;}
+.gi:nth-child(1){grid-column:span 4;grid-row:span 2;}
+.gi:nth-child(2){grid-column:span 5;}
+.gi:nth-child(3){grid-column:span 3;}
+.gi:nth-child(4){grid-column:span 3;}
+.gi:nth-child(5){grid-column:span 5;}
+.gi-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:70px;
+  transition:transform 0.7s cubic-bezier(0.23,1,0.32,1);
+}
+.gi:hover .gi-inner{transform:scale(1.12);}
+.gg1{background:radial-gradient(ellipse at 50% 30%,#2a1a00,#1a1000);}
+.gg2{background:radial-gradient(ellipse at 50% 30%,#1a0a00,#120600);}
+.gg3{background:radial-gradient(ellipse at 50% 30%,#1a0a0a,#120505);}
+.gg4{background:radial-gradient(ellipse at 50% 30%,#0f1a0a,#0a1000);}
+.gg5{background:radial-gradient(ellipse at 50% 30%,#1a1200,#120e00);}
+.gi-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(232,160,0,0.92),transparent 55%);
+  opacity:0;transition:opacity 0.4s;border-radius:8px;
+  display:flex;align-items:flex-end;padding:20px;
+}
+.gi:hover .gi-overlay{opacity:1;}
+.gi-label{
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-weight:700;
+  color:var(--bg);letter-spacing:0.5px;
+}
+
+/* ── MAP ── */
+.map-section{background:var(--bg);}
+.map-wrap{
+  display:grid;grid-template-columns:1fr 1.3fr;
+  gap:6px;border:1px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.map-info{background:var(--card);padding:56px;display:flex;flex-direction:column;gap:26px;justify-content:center;}
+.mi-item{display:flex;align-items:flex-start;gap:16px;}
+.mi-icon{
+  width:46px;height:46px;
+  background:var(--gold-dim);
+  border:1px solid rgba(232,160,0,0.2);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.mi-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.mi-val{font-size:14px;color:var(--white);line-height:1.6;}
+.map-frame{min-height:420px;position:relative;}
+.map-frame iframe{width:100%;height:100%;border:none;min-height:420px;filter:grayscale(60%) sepia(20%) hue-rotate(10deg);}
+
+/* ── CONTACT ── */
+.contact-sec{background:var(--surface);}
+.contact-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:6px;border:1px solid var(--border);border-radius:12px;overflow:hidden;
+}
+.c-left{
+  background:var(--card);padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.c-right{
+  background:linear-gradient(135deg,#1a1200,#0f0900);
+  padding:64px;
+  display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--border);
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.c-right::before{
+  content:'🍬';position:absolute;
+  font-size:180px;bottom:-20px;right:-10px;
+  opacity:0.06;animation:bgSweet 5s ease-in-out infinite;
+}
+@keyframes bgSweet{0%,100%{transform:rotate(-15deg) scale(1);}50%{transform:rotate(15deg) scale(1.05);}}
+
+.c-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,4vw,48px);
+  font-weight:700;color:var(--white);
+  margin-bottom:10px;line-height:1.1;
+}
+.c-title em{font-style:italic;color:var(--gold);}
+.c-sub{font-size:14px;color:var(--grey);line-height:1.7;margin-bottom:32px;}
+
+.wa-big{
+  display:inline-flex;align-items:center;gap:14px;
+  background:#25D366;color:white;
+  padding:18px 36px;border-radius:100px;
+  font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:700;
+  letter-spacing:1px;text-decoration:none;
+  transition:all 0.4s;
+  box-shadow:0 4px 30px rgba(37,211,102,0.2);
+  margin-bottom:28px;
+}
+.wa-big:hover{transform:translateY(-3px);box-shadow:0 12px 50px rgba(37,211,102,0.4);}
+.wa-big .wai{font-size:22px;}
+
+.c-details{display:flex;flex-direction:column;gap:18px;}
+.cd-item{display:flex;align-items:center;gap:14px;}
+.cd-icon{
+  width:42px;height:42px;
+  background:var(--gold-dim);
+  border:1px solid rgba(232,160,0,0.2);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.cd-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.cd-val{font-size:14px;color:var(--white);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:36px 6%;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+}
+.f-logo{
+  display:flex;align-items:center;gap:10px;
+}
+.f-logo-icon{
+  width:36px;height:36px;
+  background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.f-logo-text{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+  color:var(--white);letter-spacing:1px;
+}
+.f-logo-text span{color:var(--gold);}
+footer p{font-size:12px;color:var(--muted);}
+
+/* ── FLOAT WA ── */
+.float-wa{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  display:flex;align-items:center;gap:10px;
+  background:#25D366;color:white;
+  padding:13px 22px 13px 18px;border-radius:100px;
+  font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:0.5px;text-decoration:none;
+  box-shadow:0 4px 30px rgba(37,211,102,0.3);
+  animation:waPulse 3s infinite;transition:all 0.3s;
+}
+.float-wa:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(37,211,102,0.5);}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 30px rgba(37,211,102,0.3);}50%{box-shadow:0 4px 50px rgba(37,211,102,0.6);}}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.up{opacity:1;transform:translateY(0);}
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){
+  .hero-sweets{display:none;}
+  .cat-panel.active{grid-template-columns:repeat(2,1fr);}
+  .offers-grid{grid-template-columns:1fr;}
+}
+@media(max-width:900px){
+  .map-wrap{grid-template-columns:1fr;}
+  .contact-inner{grid-template-columns:1fr;}
+  .c-right{border-left:none;border-top:1px solid var(--border);}
+  .gal-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;}
+  .gi{grid-column:span 1!important;grid-row:span 1!important;height:200px;}
+}
+@media(max-width:768px){
+  nav{padding:16px 5%;}
+  .nav-links,.nav-order{display:none;}
+  .ham{display:flex;}
+  section{padding:70px 5%;}
+  .hero{padding:100px 5% 60px;}
+  .hero-stats{gap:24px;flex-wrap:wrap;}
+  .c-left,.c-right{padding:36px;}
+  footer{flex-direction:column;text-align:center;}
+  .offers-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:48px;}
+  .hero-btns{flex-direction:column;}
+  .cat-panel.active{grid-template-columns:1fr;}
+  .float-wa span:last-child{display:none;}
+  .float-wa{border-radius:50%;padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-emoji">🍬</div>
+  <div class="loader-name">Royal Sweets</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">
+    <div class="logo-icon">👑</div>
+    <div class="logo-text">Royal <span>Sweets</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#categories">Sweets</a></li>
+    <li><a href="#offers">Offers</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#location">Location</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/919876543210?text=Hi%20Royal%20Sweets!%20I%20want%20to%20order." target="_blank" class="nav-order">
+    💬 Order Now
+  </a>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob-nav" id="mobNav">
+  <a href="#categories" onclick="closeM()">Our Sweets</a>
+  <a href="#offers" onclick="closeM()">Festival Offers</a>
+  <a href="#gallery" onclick="closeM()">Gallery</a>
+  <a href="#location" onclick="closeM()">Location</a>
+  <a href="#contact" onclick="closeM()">Contact</a>
+  <a href="https://wa.me/919876543210" target="_blank" style="color:#25D366!important">💬 Order on WhatsApp</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-orns">
+    <div class="orn orn1"></div>
+    <div class="orn orn2"></div>
+    <div class="orn orn3"></div>
+  </div>
+
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="badge-star">✦</span>
+      Since 1985 · Trusted by 50,000+ Families
+    </div>
+    <h1>
+      Taste the<br>
+      <span class="line-gold">Royal</span><br>
+      <span class="line-outline">Tradition</span>
+    </h1>
+    <p class="hero-tagline">— Handcrafted sweets made with love & pure ingredients</p>
+    <p class="hero-desc">
+      For over 35 years, Royal Sweets has been crafting the finest Indian confections — from melt-in-your-mouth laddoos to rich milk-based barfis, every bite is a celebration.
+    </p>
+    <div class="hero-btns">
+      <a href="https://wa.me/919876543210?text=Hi!%20I%20want%20to%20order%20sweets." target="_blank" class="btn-order-wa">
+        💬 Order on WhatsApp
+      </a>
+      <a href="#categories" class="btn-view-menu">
+        👑 View Sweets
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hs-num">35+</div>
+        <div class="hs-label">Years of Trust</div>
+      </div>
+      <div>
+        <div class="hs-num">80+</div>
+        <div class="hs-label">Sweet Varieties</div>
+      </div>
+      <div>
+        <div class="hs-num">50K+</div>
+        <div class="hs-label">Happy Families</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating sweet cards -->
+  <div class="hero-sweets">
+    <div class="sw-card">
+      <div class="sw-emoji">🟡</div>
+      <div class="sw-name">Laddoo</div>
+      <div class="sw-price">₹12/pc</div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-emoji">🍫</div>
+      <div class="sw-name">Barfi</div>
+      <div class="sw-price">₹18/pc</div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-emoji">🎂</div>
+      <div class="sw-name">Cakes</div>
+      <div class="sw-price">₹699+</div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-emoji">🍮</div>
+      <div class="sw-name">Halwa</div>
+      <div class="sw-price">₹80/kg</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <div class="marquee-track">
+      <div class="mq-item">🍬 Pure Ingredients <span class="mq-dot">·</span></div>
+      <div class="mq-item">👑 35 Years of Trust <span class="mq-dot">·</span></div>
+      <div class="mq-item">🚚 Home Delivery Available <span class="mq-dot">·</span></div>
+      <div class="mq-item">🎁 Custom Gift Boxes <span class="mq-dot">·</span></div>
+      <div class="mq-item">🌿 No Artificial Colours <span class="mq-dot">·</span></div>
+      <div class="mq-item">💛 Made Fresh Daily <span class="mq-dot">·</span></div>
+      <div class="mq-item">🏆 Award Winning Recipes <span class="mq-dot">·</span></div>
+      <!-- dupe -->
+      <div class="mq-item">🍬 Pure Ingredients <span class="mq-dot">·</span></div>
+      <div class="mq-item">👑 35 Years of Trust <span class="mq-dot">·</span></div>
+      <div class="mq-item">🚚 Home Delivery Available <span class="mq-dot">·</span></div>
+      <div class="mq-item">🎁 Custom Gift Boxes <span class="mq-dot">·</span></div>
+      <div class="mq-item">🌿 No Artificial Colours <span class="mq-dot">·</span></div>
+      <div class="mq-item">💛 Made Fresh Daily <span class="mq-dot">·</span></div>
+      <div class="mq-item">🏆 Award Winning Recipes <span class="mq-dot">·</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="cat-section" id="categories">
+  <div class="sec-kicker"><span class="kicker-ornament">✦</span> Our Collection</div>
+  <h2 class="sec-title">Made with <em>Love</em></h2>
+  <p class="sec-sub">Each sweet is handcrafted daily using traditional recipes and the finest pure ingredients.</p>
+
+  <div class="cat-tabs">
+    <button class="cat-tab active" data-cat="laddoo"><span class="cat-tab-emoji">🟡</span> Laddoo</button>
+    <button class="cat-tab" data-cat="barfi"><span class="cat-tab-emoji">🍫</span> Barfi</button>
+    <button class="cat-tab" data-cat="halwa"><span class="cat-tab-emoji">🍮</span> Halwa</button>
+    <button class="cat-tab" data-cat="cakes"><span class="cat-tab-emoji">🎂</span> Cakes</button>
+    <button class="cat-tab" data-cat="namkeen"><span class="cat-tab-emoji">🥨</span> Namkeen</button>
+    <button class="cat-tab" data-cat="gift"><span class="cat-tab-emoji">🎁</span> Gift Boxes</button>
+  </div>
+
+  <!-- Laddoo -->
+  <div class="cat-panel active" id="cat-laddoo">
+    <div class="prod-card reveal">
+      <div class="prod-img pi1"><span>🟡</span><div class="prod-img-glow"></div></div>
+      <div class="prod-badge">Bestseller</div>
+      <div class="prod-body">
+        <div class="prod-name">Besan Laddoo</div>
+        <div class="prod-desc">Classic gram flour laddoo roasted in pure ghee with cardamom and dry fruits.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹12/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Besan Laddoo" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card reveal d1">
+      <div class="prod-img pi2"><span>🔶</span><div class="prod-img-glow"></div></div>
+      <div class="prod-badge new">New</div>
+      <div class="prod-body">
+        <div class="prod-name">Motichur Laddoo</div>
+        <div class="prod-desc">Tiny boondi pearls bound together with saffron-infused sugar syrup.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹15/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Motichur Laddoo" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card reveal d2">
+      <div class="prod-img pi3"><span>🟤</span><div class="prod-img-glow"></div></div>
+      <div class="prod-body">
+        <div class="prod-name">Churma Laddoo</div>
+        <div class="prod-desc">Crushed wheat cooked in ghee, sweetened with jaggery and fennel seeds.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹14/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Churma Laddoo" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card reveal d3">
+      <div class="prod-img pi4"><span>🟠</span><div class="prod-img-glow"></div></div>
+      <div class="prod-badge offer">10% Off</div>
+      <div class="prod-body">
+        <div class="prod-name">Coconut Laddoo</div>
+        <div class="prod-desc">Fresh coconut mixed with khoya and cardamom, rolled in desiccated coconut.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹13/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Coconut Laddoo" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barfi -->
+  <div class="cat-panel" id="cat-barfi">
+    <div class="prod-card reveal">
+      <div class="prod-img pi5"><span>🤍</span><div class="prod-img-glow"></div></div>
+      <div class="prod-badge">Bestseller</div>
+      <div class="prod-body">
+        <div class="prod-name">Kaju Katli</div>
+        <div class="prod-desc">Premium cashew barfi with silver vark — the classic gift for every occasion.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹80/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Kaju Katli" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card reveal d1">
+      <div class="prod-img pi6"><span>🟢</span><div class="prod-img-glow"></div></div>
+      <div class="prod-body">
+        <div class="prod-name">Pista Barfi</div>
+        <div class="prod-desc">Rich pistachio fudge with layers of green and white — a royal delicacy.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹90/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Pista Barfi" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card reveal d2">
+      <div class="prod-img pi7"><span>🍫</span><div class="prod-img-glow"></div></div>
+      <div class="prod-badge new">New</div>
+      <div class="prod-body">
+        <div class="prod-name">Chocolate Barfi</div>
+        <div class="prod-desc">Traditional khoya barfi with a rich Belgian chocolate twist and almond topping.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹45/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Chocolate Barfi" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+    <div class="prod-card reveal d3">
+      <div class="prod-img pi8"><span>🩷</span><div class="prod-img-glow"></div></div>
+      <div class="prod-body">
+        <div class="prod-name">Rose Barfi</div>
+        <div class="prod-desc">Delicate milk barfi flavoured with gulkand and dried rose petals.</div>
+        <div class="prod-footer">
+          <div class="prod-price">₹35/pc</div>
+          <a href="https://wa.me/919876543210?text=I want to order Rose Barfi" target="_blank" class="prod-wa">💬 Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Halwa -->
+  <div class="cat-panel" id="cat-halwa">
+    <div class="prod-card reveal"><div class="prod-img pi1"><span>🟠</span><div class="prod-img-glow"></div></div><div class="prod-badge">Bestseller</div><div class="prod-body"><div class="prod-name">Gajar Halwa</div><div class="prod-desc">Slow-cooked carrots in full-fat milk, sugar and ghee — a winter classic.</div><div class="prod-footer"><div class="prod-price">₹60/100g</div><a href="https://wa.me/919876543210?text=I want Gajar Halwa" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d1"><div class="prod-img pi3"><span>🟡</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Sooji Halwa</div><div class="prod-desc">Semolina roasted golden in ghee with raisins, cashews and saffron.</div><div class="prod-footer"><div class="prod-price">₹40/100g</div><a href="https://wa.me/919876543210?text=I want Sooji Halwa" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d2"><div class="prod-img pi5"><span>🟤</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Atte Ka Halwa</div><div class="prod-desc">Whole wheat halwa tempered with ghee, jaggery and cardamom — pure comfort.</div><div class="prod-footer"><div class="prod-price">₹45/100g</div><a href="https://wa.me/919876543210?text=I want Atte Ka Halwa" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d3"><div class="prod-img pi2"><span>🟢</span><div class="prod-img-glow"></div></div><div class="prod-badge new">Seasonal</div><div class="prod-body"><div class="prod-name">Moong Dal Halwa</div><div class="prod-desc">Split moong dal slow-roasted in ghee and slow-cooked with saffron milk.</div><div class="prod-footer"><div class="prod-price">₹70/100g</div><a href="https://wa.me/919876543210?text=I want Moong Dal Halwa" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+  </div>
+
+  <!-- Cakes -->
+  <div class="cat-panel" id="cat-cakes">
+    <div class="prod-card reveal"><div class="prod-img pi4"><span>🎂</span><div class="prod-img-glow"></div></div><div class="prod-badge">Popular</div><div class="prod-body"><div class="prod-name">Birthday Cake</div><div class="prod-desc">Custom birthday cakes with your choice of flavour, size and personalised message.</div><div class="prod-footer"><div class="prod-price">₹699+</div><a href="https://wa.me/919876543210?text=I want to order a Birthday Cake" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d1"><div class="prod-img pi6"><span>🍰</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Wedding Cake</div><div class="prod-desc">Elegant multi-tiered wedding cakes designed to match your special day's theme.</div><div class="prod-footer"><div class="prod-price">₹2999+</div><a href="https://wa.me/919876543210?text=I want to order a Wedding Cake" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d2"><div class="prod-img pi8"><span>🧁</span><div class="prod-img-glow"></div></div><div class="prod-badge new">New</div><div class="prod-body"><div class="prod-name">Cupcakes (Box of 6)</div><div class="prod-desc">Gourmet cupcakes with premium frosting — chocolate, vanilla, strawberry and more.</div><div class="prod-footer"><div class="prod-price">₹349</div><a href="https://wa.me/919876543210?text=I want to order Cupcakes" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d3"><div class="prod-img pi7"><span>🎁</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Celebration Cake</div><div class="prod-desc">Custom theme cakes for all events — office parties, anniversaries, baby showers.</div><div class="prod-footer"><div class="prod-price">₹1299+</div><a href="https://wa.me/919876543210?text=I want to order a Celebration Cake" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+  </div>
+
+  <!-- Namkeen -->
+  <div class="cat-panel" id="cat-namkeen">
+    <div class="prod-card reveal"><div class="prod-img pi1"><span>🥨</span><div class="prod-img-glow"></div></div><div class="prod-badge">Popular</div><div class="prod-body"><div class="prod-name">Aloo Bhujia</div><div class="prod-desc">Crispy potato sev with a blend of chaat masala and ajwain.</div><div class="prod-footer"><div class="prod-price">₹120/500g</div><a href="https://wa.me/919876543210?text=I want Aloo Bhujia" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d1"><div class="prod-img pi3"><span>🌶️</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Spicy Chivda</div><div class="prod-desc">Flattened rice flakes tossed with peanuts, curry leaves and spices.</div><div class="prod-footer"><div class="prod-price">₹100/500g</div><a href="https://wa.me/919876543210?text=I want Spicy Chivda" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d2"><div class="prod-img pi5"><span>🥜</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Masala Cashews</div><div class="prod-desc">Roasted cashews coated with chatpata masala — the perfect tea-time snack.</div><div class="prod-footer"><div class="prod-price">₹280/250g</div><a href="https://wa.me/919876543210?text=I want Masala Cashews" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d3"><div class="prod-img pi2"><span>🍘</span><div class="prod-img-glow"></div></div><div class="prod-badge new">New</div><div class="prod-body"><div class="prod-name">Mathri</div><div class="prod-desc">Flaky deep-fried crackers made with ajwain and black pepper.</div><div class="prod-footer"><div class="prod-price">₹90/500g</div><a href="https://wa.me/919876543210?text=I want Mathri" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+  </div>
+
+  <!-- Gift Boxes -->
+  <div class="cat-panel" id="cat-gift">
+    <div class="prod-card reveal"><div class="prod-img pi4"><span>🎁</span><div class="prod-img-glow"></div></div><div class="prod-badge">Popular</div><div class="prod-body"><div class="prod-name">Classic Gift Box</div><div class="prod-desc">Assorted premium sweets in an elegant royal gold gift box. Perfect for all occasions.</div><div class="prod-footer"><div class="prod-price">₹499</div><a href="https://wa.me/919876543210?text=I want the Classic Gift Box" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d1"><div class="prod-img pi6"><span>👑</span><div class="prod-img-glow"></div></div><div class="prod-badge">Luxury</div><div class="prod-body"><div class="prod-name">Royal Hamper</div><div class="prod-desc">Premium assortment of 25 handpicked sweets in a bespoke hamper box.</div><div class="prod-footer"><div class="prod-price">₹1299</div><a href="https://wa.me/919876543210?text=I want the Royal Hamper" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d2"><div class="prod-img pi8"><span>💝</span><div class="prod-img-glow"></div></div><div class="prod-badge offer">Custom</div><div class="prod-body"><div class="prod-name">Personalised Box</div><div class="prod-desc">Customise your box with your choice of sweets, printed message and ribbon.</div><div class="prod-footer"><div class="prod-price">₹299+</div><a href="https://wa.me/919876543210?text=I want a Personalised Gift Box" target="_blank" class="prod-wa">💬 Order</a></div></div></div>
+    <div class="prod-card reveal d3"><div class="prod-img pi1"><span>🏢</span><div class="prod-img-glow"></div></div><div class="prod-body"><div class="prod-name">Corporate Gifting</div><div class="prod-desc">Bulk orders for corporate gifting with company branding. Min 50 boxes.</div><div class="prod-footer"><div class="prod-price">₹199/box</div><a href="https://wa.me/919876543210?text=I want to discuss Corporate Gifting" target="_blank" class="prod-wa">💬 Enquire</a></div></div></div>
+  </div>
+</section>
+
+<!-- OFFERS -->
+<section class="offers" id="offers">
+  <div class="sec-kicker"><span class="kicker-ornament">🎉</span> Festival Specials</div>
+  <h2 class="sec-title">Celebrate with <em>Sweets</em></h2>
+  <p class="sec-sub">Special discounts and limited-edition sweets for every festival and occasion.</p>
+
+  <div class="offers-grid">
+    <div class="offer-card eid reveal">
+      <div class="offer-bg-text">EID</div>
+      <div class="offer-emoji">🌙</div>
+      <div class="offer-tag">Eid Special</div>
+      <div class="offer-title">Eid Mubarak<br>Sweet Collection</div>
+      <div class="offer-desc">Celebrate Eid with our exclusive date barfis, sheer khurma sweets and premium kaju-pista gift hampers.</div>
+      <div class="offer-discount">20% OFF</div>
+      <br>
+      <a href="https://wa.me/919876543210?text=I want the Eid Special offer" target="_blank" class="offer-cta">Order Now →</a>
+    </div>
+
+    <div class="offer-card diwali reveal d1">
+      <div class="offer-bg-text">DIWALI</div>
+      <div class="offer-emoji">🪔</div>
+      <div class="offer-tag">Diwali Special</div>
+      <div class="offer-title">Diwali Sweet<br>Mega Collection</div>
+      <div class="offer-desc">Light up your celebrations with 50+ Diwali special sweets, premium gift boxes and family hampers.</div>
+      <div class="offer-discount">25% OFF</div>
+      <br>
+      <a href="https://wa.me/919876543210?text=I want the Diwali Special offer" target="_blank" class="offer-cta">Order Now →</a>
+    </div>
+
+    <div class="offer-card wedding reveal d2">
+      <div class="offer-bg-text">WEDDING</div>
+      <div class="offer-emoji">💒</div>
+      <div class="offer-tag">Wedding Bulk Order</div>
+      <div class="offer-title">Wedding &<br>Bulk Orders</div>
+      <div class="offer-desc">Custom wedding return gifts, mehendi favours and bulk sweet orders for 100–10,000 guests.</div>
+      <div class="offer-discount">15% OFF</div>
+      <br>
+      <a href="https://wa.me/919876543210?text=I want to discuss Wedding bulk order" target="_blank" class="offer-cta">Enquire Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-sec" id="gallery">
+  <div class="sec-kicker"><span class="kicker-ornament">📸</span> Gallery</div>
+  <h2 class="sec-title">A Feast for <em>the Eyes</em></h2>
+  <p class="sec-sub">Every sweet is a work of art — handcrafted, fresh, and made with love.</p>
+
+  <div class="gal-grid">
+    <div class="gi reveal"><div class="gi-inner gg1">🟡</div><div class="gi-overlay"><span class="gi-label">Laddoo Collection</span></div></div>
+    <div class="gi reveal d1"><div class="gi-inner gg2">🍫</div><div class="gi-overlay"><span class="gi-label">Premium Barfi</span></div></div>
+    <div class="gi reveal d2"><div class="gi-inner gg3">🎁</div><div class="gi-overlay"><span class="gi-label">Gift Hampers</span></div></div>
+    <div class="gi reveal d1"><div class="gi-inner gg4">🎂</div><div class="gi-overlay"><span class="gi-label">Celebration Cakes</span></div></div>
+    <div class="gi reveal d2"><div class="gi-inner gg5">🍮</div><div class="gi-overlay"><span class="gi-label">Fresh Halwa</span></div></div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section" id="location">
+  <div class="sec-kicker"><span class="kicker-ornament">📍</span> Visit Us</div>
+  <h2 class="sec-title">Find Your <em>Sweet Shop</em></h2>
+  <p class="sec-sub">Walk in and experience the aroma of freshly made sweets every day.</p>
+
+  <div class="map-wrap reveal">
+    <div class="map-info">
+      <div class="mi-item">
+        <div class="mi-icon">📍</div>
+        <div><div class="mi-label">Address</div><div class="mi-val">14, Pondy Bazaar, T. Nagar<br>Chennai, Tamil Nadu 600017</div></div>
+      </div>
+      <div class="mi-item">
+        <div class="mi-icon">🕐</div>
+        <div><div class="mi-label">Shop Hours</div><div class="mi-val">Mon – Sun: 7:00 AM – 10:00 PM<br>Open all 365 days</div></div>
+      </div>
+      <div class="mi-item">
+        <div class="mi-icon">📞</div>
+        <div><div class="mi-label">Phone</div><div class="mi-val">+91 98765 43210</div></div>
+      </div>
+      <div class="mi-item">
+        <div class="mi-icon">🚚</div>
+        <div><div class="mi-label">Delivery</div><div class="mi-val">Home delivery within Chennai<br>Bulk orders pan-India</div></div>
+      </div>
+    </div>
+    <div class="map-frame">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.1!2d80.2344!3d13.0418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDAyJzMwLjQiTiA4MMKwMTQnMDMuOSJF!5e0!3m2!1sen!2sin!4v1234567890" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-sec" id="contact">
+  <div class="sec-kicker"><span class="kicker-ornament">💬</span> Order & Connect</div>
+  <div class="contact-inner reveal">
+    <div class="c-left">
+      <div class="c-details">
+        <div class="cd-item"><div class="cd-icon">📞</div><div><div class="cd-label">Phone</div><div class="cd-val">+91 98765 43210</div></div></div>
+        <div class="cd-item"><div class="cd-icon">✉️</div><div><div class="cd-label">Email</div><div class="cd-val">orders@royalsweets.in</div></div></div>
+        <div class="cd-item"><div class="cd-icon">📍</div><div><div class="cd-label">Location</div><div class="cd-val">14, Pondy Bazaar, T. Nagar, Chennai</div></div></div>
+        <div class="cd-item"><div class="cd-icon">🕐</div><div><div class="cd-label">Hours</div><div class="cd-val">7:00 AM – 10:00 PM · All Days</div></div></div>
+        <div class="cd-item"><div class="cd-icon">🚚</div><div><div class="cd-label">Delivery</div><div class="cd-val">Same day delivery in Chennai</div></div></div>
+      </div>
+    </div>
+    <div class="c-right">
+      <div class="c-title">Order<br><em>Fresh Sweets</em><br>Today</div>
+      <div class="c-sub">Message us directly on WhatsApp for the fastest order processing. We confirm within minutes!</div>
+      <a href="https://wa.me/919876543210?text=Hi%20Royal%20Sweets!%20I%20want%20to%20place%20an%20order." target="_blank" class="wa-big">
+        <span class="wai">💬</span> Order on WhatsApp
+      </a>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;">
+        📦 Custom boxes available<br>
+        🎁 Gift wrapping on request<br>
+        🚚 Free delivery above ₹999
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">
+    <div class="f-logo-icon">👑</div>
+    <div class="f-logo-text">Royal <span>Sweets</span></div>
+  </div>
+  <p>© 2025 Royal Sweets · T. Nagar, Chennai</p>
+  <p style="color:var(--gold);font-size:12px;font-weight:700;letter-spacing:2px;">TASTE THE TRADITION</p>
+</footer>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/919876543210?text=Hi%20Royal%20Sweets!%20I%20want%20to%20order." target="_blank" class="float-wa">
+  <span style="font-size:20px;">💬</span>
+  <span>Order Sweets</span>
+</a>
+
+<script>
+// Loader
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 1500);
+});
+
+// Particles
+(function(){
+  const container = document.getElementById('particles');
+  for(let i=0;i<18;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*4+2;
+    p.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;
+      animation-duration:${Math.random()*12+8}s;
+      animation-delay:${Math.random()*10}s;
+      opacity:${Math.random()*0.4+0.1};
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Ham
+document.getElementById('ham').addEventListener('click', () => {
+  document.getElementById('mobNav').classList.toggle('open');
+});
+function closeM(){ document.getElementById('mobNav').classList.remove('open'); }
+
+// Category tabs
+document.querySelectorAll('.cat-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('cat-' + btn.dataset.cat);
+    if(panel){
+      panel.classList.add('active');
+      panel.querySelectorAll('.reveal').forEach(el => {
+        el.classList.remove('up');
+        setTimeout(() => el.classList.add('up'), 60);
+      });
+    }
+  });
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('up'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Trigger active panel items
+document.querySelectorAll('.cat-panel.active .reveal').forEach(el => {
+  setTimeout(() => el.classList.add('up'), 300);
+});
+
+// Counter animation
+function animCounter(el, target, suffix=''){
+  let n=0; const step=target/(1800/16);
+  const t=setInterval(()=>{
+    n+=step;
+    if(n>=target){el.textContent=target+suffix;clearInterval(t);}
+    else{el.textContent=Math.floor(n)+suffix;}
+  },16);
+}
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      document.querySelectorAll('.hs-num').forEach(el => {
+        const txt = el.textContent;
+        const num = parseInt(txt.replace(/\D/g,''));
+        const suf = txt.replace(/[0-9]/g,'');
+        animCounter(el, num, suf);
+      });
+      cObs.disconnect();
+    }
+  });
+},{threshold:0.5});
+const statsEl = document.querySelector('.hero-stats');
+if(statsEl) cObs.observe(statsEl);
+</script>
+</body>
+</html>
